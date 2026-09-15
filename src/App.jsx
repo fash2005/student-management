@@ -72,13 +72,13 @@ function App() {
 
   const [confirmState, setConfirmState] = useState({ isOpen: false, message: '', onConfirm: () => {} })
 
-const askConfirm = (message, onConfirm) => {
-  setConfirmState({ isOpen: true, message, onConfirm })
-}
+  const askConfirm = (message, onConfirm) => {
+    setConfirmState({ isOpen: true, message, onConfirm })
+  }
 
-const closeConfirm = () => {
-  setConfirmState((prev) => ({ ...prev, isOpen: false }))
-}
+  const closeConfirm = () => {
+    setConfirmState((prev) => ({ ...prev, isOpen: false }))
+  }
 
   // ================================
   // COURSE MATERIALS
@@ -94,6 +94,9 @@ const closeConfirm = () => {
   const [materialFile, setMaterialFile] = useState(null)
   const [materialMode, setMaterialMode] = useState('upload')
   const [uploading, setUploading] = useState(false)
+
+  const [editingMaterialId, setEditingMaterialId] = useState(null)
+  const [materialFileInputKey, setMaterialFileInputKey] = useState(0)
 
   const [gpaStudent, setGpaStudent] = useState('')
 
@@ -145,14 +148,14 @@ const closeConfirm = () => {
     return Object.values(courseMap)
   })()
 
-  const averageGPA = results.length
-    ? (
-        results.reduce(
-          (sum, r) => sum + Number(r.grade_point),
-          0
-        ) / results.length
-      ).toFixed(2)
-    : '0.00'
+  const averageGPA = (() => {
+    const totalUnits = results.reduce((sum, r) => sum + Number(r.course_unit), 0)
+    const totalPoints = results.reduce(
+      (sum, r) => sum + Number(r.grade_point) * Number(r.course_unit),
+      0
+    )
+    return totalUnits ? (totalPoints / totalUnits).toFixed(2) : '0.00'
+  })()
 
   // ================================
   // AUTHENTICATION
@@ -301,77 +304,77 @@ const closeConfirm = () => {
   // ================================
 
   const deleteStudent = async (studentId, studentName) => {
-  const { error } = await supabase.from('students').delete().eq('id', studentId)
-  if (error) {
-    console.error('Error deleting student:', error)
-    toast.error('Failed to delete student')
-    return
+    const { error } = await supabase.from('students').delete().eq('id', studentId)
+    if (error) {
+      console.error('Error deleting student:', error)
+      toast.error('Failed to delete student')
+      return
+    }
+    setStudents((prev) => prev.filter((s) => s.id !== studentId))
+    toast.success(`${studentName} was deleted successfully!`)
   }
-  setStudents((prev) => prev.filter((s) => s.id !== studentId))
-  toast.success(`${studentName} was deleted successfully!`)
-}
 
-const handleDeleteStudent = (studentId, studentName) => {
-  askConfirm(`Are you sure you want to delete ${studentName}?`, () => {
-    closeConfirm()
-    deleteStudent(studentId, studentName)
-  })
-}
-
-const deleteResult = async (resultId) => {
-  const { error } = await supabase.from('results').delete().eq('id', resultId)
-  if (error) {
-    console.error('Error deleting result:', error)
-    toast.error('Failed to delete result')
-    return
+  const handleDeleteStudent = (studentId, studentName) => {
+    askConfirm(`Are you sure you want to delete ${studentName}?`, () => {
+      closeConfirm()
+      deleteStudent(studentId, studentName)
+    })
   }
-  setResults((prev) => prev.filter((r) => r.id !== resultId))
-  toast.success('Result deleted successfully!')
-}
 
-function handleDeleteResult(resultId)  {
-  askConfirm('Are you sure you want to delete this result?', () => {
-    closeConfirm()
-    deleteResult(resultId)
-  })
-}
-
-const deleteRegistration = async (registrationId) => {
-  const { error } = await supabase.from('registrations').delete().eq('id', registrationId)
-  if (error) {
-    console.error('Error deleting registration:', error)
-    toast.error('Failed to remove registration')
-    return
+  const deleteResult = async (resultId) => {
+    const { error } = await supabase.from('results').delete().eq('id', resultId)
+    if (error) {
+      console.error('Error deleting result:', error)
+      toast.error('Failed to delete result')
+      return
+    }
+    setResults((prev) => prev.filter((r) => r.id !== resultId))
+    toast.success('Result deleted successfully!')
   }
-  setRegistrations((prev) => prev.filter((r) => r.id !== registrationId))
-  toast.success('Course registration removed successfully!')
-}
 
-function handleDeleteRegistration(registrationId) {
-  askConfirm('Are you sure you want to remove this course registration?', () => {
-    closeConfirm()
-    deleteRegistration(registrationId)
-  })
-}
-
-const deleteMaterial = async (materialId) => {
-  const { error } = await supabase.from('materials').delete().eq('id', materialId)
-  if (error) {
-    console.error('Error deleting material:', error)
-    toast.error('Failed to delete material')
-    return
+  function handleDeleteResult(resultId) {
+    askConfirm('Are you sure you want to delete this result?', () => {
+      closeConfirm()
+      deleteResult(resultId)
+    })
   }
-  setMaterials((prev) => prev.filter((m) => m.id !== materialId))
-  toast.success('Material deleted successfully!')
-}
 
-function handleDeleteMaterial(materialId) {
-  askConfirm('Are you sure you want to delete this material?', () => {
-    closeConfirm()
-    deleteMaterial(materialId)
-  })
-}
- 
+  const deleteRegistration = async (registrationId) => {
+    const { error } = await supabase.from('registrations').delete().eq('id', registrationId)
+    if (error) {
+      console.error('Error deleting registration:', error)
+      toast.error('Failed to remove registration')
+      return
+    }
+    setRegistrations((prev) => prev.filter((r) => r.id !== registrationId))
+    toast.success('Course registration removed successfully!')
+  }
+
+  function handleDeleteRegistration(registrationId) {
+    askConfirm('Are you sure you want to remove this course registration?', () => {
+      closeConfirm()
+      deleteRegistration(registrationId)
+    })
+  }
+
+  const deleteMaterial = async (materialId) => {
+    const { error } = await supabase.from('materials').delete().eq('id', materialId)
+    if (error) {
+      console.error('Error deleting material:', error)
+      toast.error('Failed to delete material')
+      return
+    }
+    setMaterials((prev) => prev.filter((m) => m.id !== materialId))
+    toast.success('Material deleted successfully!')
+  }
+
+  function handleDeleteMaterial(materialId) {
+    askConfirm('Are you sure you want to delete this material?', () => {
+      closeConfirm()
+      deleteMaterial(materialId)
+    })
+  }
+
   // ================================
   // ADD RESULT
   // ================================
@@ -458,6 +461,19 @@ function handleDeleteMaterial(materialId) {
       return
     }
 
+    const alreadyRegistered = registrations.some(
+     (r) => String(r.student_id) === String(regStudent) && r.course_code === regCourseCode
+)
+    if (alreadyRegistered) {
+      toast.error('This student is already registered for this course')
+      setRegStudent('')
+      setRegCourseCode('')
+      setRegCourseTitle('')
+      setRegCourseUnit('')
+      
+      return
+}
+
     const { data, error } = await supabase
       .from('registrations')
       .insert([
@@ -486,16 +502,14 @@ function handleDeleteMaterial(materialId) {
     setRegCourseUnit('')
   }
 
-
   // ================================
-  // ADD COURSE MATERIAL
+  // ADD / UPDATE COURSE MATERIAL
   // ================================
 
   const handleAddMaterial = async (e) => {
     e.preventDefault()
-
     if (!materialCourseCode) {
-      toast.error('Please select a course')
+      toast.error("Please select a course")
       return
     }
 
@@ -509,112 +523,101 @@ function handleDeleteMaterial(materialId) {
       return
     }
 
+    const duplicate = materials.find(
+      (m) =>
+        m.course_code === materialCourseCode &&
+        m.title.trim().toLowerCase() === materialTitle.trim().toLowerCase() &&
+        m.id !== editingMaterialId
+    )
+
+    const targetId = editingMaterialId || duplicate?.id || null
+
+    let link = materialLink
+    let fileType = 'link'
+
     if (materialMode === 'upload') {
       if (!materialFile) {
-        toast.error('Please choose a file to upload')
-        return
-      }
+        if (!targetId) {
+          toast.error('Please choose a file to upload')
+          return
+        }
+      } else {
+        setUploading(true)
 
-      setUploading(true)
+        const fileExt = materialFile.name.split('.').pop()
+        const fileName = `${Date.now()}-${materialFile.name}`
 
-      const fileExt = materialFile.name
-        .split('.')
-        .pop()
-
-      const fileName = `${Date.now()}-${materialFile.name}`
-
-      const { error: uploadError } =
-        await supabase.storage
+        const { error: uploadError } = await supabase.storage
           .from('materials')
           .upload(fileName, materialFile)
 
-      if (uploadError) {
-        console.error(
-          'Error uploading file:',
-          uploadError
-        )
+        if (uploadError) {
+          console.error('Error uploading file:', uploadError)
+          toast.error('Failed to upload file: ' + uploadError.message)
+          setUploading(false)
+          return
+        }
 
-        toast.error(
-          'Failed to upload file: ' +
-            uploadError.message
-        )
-
-        setUploading(false)
-        return
-      }
-
-      const { data: publicUrlData } =
-        supabase.storage
+        const { data: publicUrlData } = supabase.storage
           .from('materials')
           .getPublicUrl(fileName)
 
-      const { data, error } = await supabase
-        .from('materials')
-        .insert([
-          {
-            course_code: materialCourseCode,
-            lecturer_id: materialLecturer,
-            title: materialTitle,
-            link: publicUrlData.publicUrl,
-            file_type: fileExt,
-          },
-        ])
-        .select()
-
-      setUploading(false)
-
-      if (error) {
-        console.error(
-          'Error adding material:',
-          error
-        )
-
-        toast.error(
-          'Failed to add material: ' +
-            error.message
-        )
-
-        return
+        link = publicUrlData.publicUrl
+        fileType = fileExt
       }
-
-      setMaterials((prev) => [...data, ...prev])
-
-      toast.success('Material added successfully!')
     } else {
       if (!materialLink) {
         toast.error('Please paste a link')
         return
       }
+    }
 
+    const payload = {
+      course_code: materialCourseCode,
+      lecturer_id: materialLecturer,
+      title: materialTitle,
+      ...(link ? { link, file_type: fileType } : {}),
+    }
+    
+    if (targetId) {
+  const { data, error } = await supabase
+    .from('materials')
+    .update(payload)
+    .eq('id', targetId)
+    .select()
+
+  setUploading(false)
+
+  if (error) {
+    console.error('Error updating material:', error)
+    toast.error('Failed to update material: ' + error.message)
+    return
+  }
+
+  const updatedMaterial =
+    data && data[0]
+      ? data[0]
+      : { ...materials.find((m) => m.id === targetId), ...payload }
+
+  setMaterials((prev) =>
+    prev.map((m) => (m.id === targetId ? updatedMaterial : m))
+  )
+  toast.success('Material updated successfully!') 
+} else  {
       const { data, error } = await supabase
         .from('materials')
-        .insert([
-          {
-            course_code: materialCourseCode,
-            lecturer_id: materialLecturer,
-            title: materialTitle,
-            link: materialLink,
-            file_type: 'link',
-          },
-        ])
+        .insert([payload])
         .select()
 
+      setUploading(false)
+
       if (error) {
-        console.error(
-          'Error adding material:',
-          error
-        )
-
-        toast.error(
-          'Failed to add material: ' +
-            error.message
-        )
-
+        console.error('Error adding material:', error)
+        toast.error('Failed to add material: ' + error.message)
         return
       }
 
       setMaterials((prev) => [...data, ...prev])
-
       toast.success('Material added successfully!')
     }
 
@@ -623,11 +626,19 @@ function handleDeleteMaterial(materialId) {
     setMaterialTitle('')
     setMaterialLink('')
     setMaterialFile(null)
+    setEditingMaterialId(null)
+    setMaterialFileInputKey((prev) => prev + 1)
   }
 
+  const handleEditMaterial = (material) => {
+    setEditingMaterialId(material.id)
+    setMaterialCourseCode(material.course_code)
+    setMaterialLecturer(String(material.lecturer_id))
+    setMaterialTitle(material.title)
+    setMaterialMode(material.file_type === 'link' ? 'link' : 'upload')
+    setMaterialLink(material.file_type === 'link' ? material.link : '')
+  }
 
-
- 
   // ================================
   // LOGOUT
   // ================================
@@ -2339,10 +2350,14 @@ function handleDeleteMaterial(materialId) {
                                 )
 
                                 const previousSemesterKey =
-                                  semesterKeysInSession[0]
+                                  semesterKeysInSession.length > 1
+                                    ? semesterKeysInSession[0]
+                                    : null
 
                                 const currentSemesterKey =
-                                  semesterKeysInSession[1]
+                                  semesterKeysInSession.length > 1
+                                    ? semesterKeysInSession[1]
+                                    : semesterKeysInSession[0]
 
                                 const previousGPA =
                                   previousSemesterKey
@@ -2775,16 +2790,12 @@ function handleDeleteMaterial(materialId) {
 
                 </div>
 
-                {materialMode ===
-                'upload' ? (
+                {materialMode === 'upload' ? (
                   <input
+                    key={materialFileInputKey}
                     type="file"
                     accept=".pdf,.mp4,.mov,.avi,.jpg,.jpeg,.png,.webp"
-                    onChange={(e) =>
-                      setMaterialFile(
-                        e.target.files[0]
-                      )
-                    }
+                    onChange={(e) => setMaterialFile(e.target.files[0])}
                   />
                 ) : (
                   <input
@@ -2808,9 +2819,7 @@ function handleDeleteMaterial(materialId) {
                   type="submit"
                   disabled={uploading}
                 >
-                  {uploading
-                    ? 'Uploading...'
-                    : 'Add Material'}
+                  {uploading ? 'Uploading...' : editingMaterialId ? 'Update Material' : 'Add Material'}
                 </button>
 
               </form>
@@ -2928,13 +2937,27 @@ function handleDeleteMaterial(materialId) {
                               }
                             </td>
 
-                            <td><a href={material.link} target="_blank" rel="noopener noreferrer">Open
-                              </a>
-                              </td>
-
-                              
-                              
                             <td>
+
+                              <a
+                                href={
+                                  material.link
+                                }
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                Open
+                              </a>
+
+                            </td>
+
+                            <td>
+                              <button
+                                type="button"
+                                onClick={() => handleEditMaterial(material)}
+                              >
+                                Edit
+                              </button>{' '}
                               <button
                                 type="button"
                                 onClick={() =>

@@ -34,14 +34,26 @@ function Lecturers() {
       ) : lecturers.length === 0 ? (
         <p>No lecturers found.</p>
       ) : (
-        <div className="lecturer-list">
-          {lecturers.map((lecturer) => (
-            <div className="lecturer-card" key={lecturer.id}>
-              <h3>👨‍🏫 {lecturer.lecturer_name}</h3>
-              <p>{lecturer.department}</p>
-            </div>
-          ))}
-        </div>
+        <table className="students-table">
+          <thead>
+            <tr>
+              <th>S/N</th>
+              <th>Name</th>
+              <th>Department</th>
+              <th>Lecturer Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            {lecturers.map((lecturer, index) => (
+              <tr key={lecturer.id}>
+                <td>{index + 1}</td>
+                <td>{lecturer.lecturer_name}</td>
+                <td>{lecturer.department}</td>
+                <td>{lecturer.lecturer_type || 'N/A'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   )
