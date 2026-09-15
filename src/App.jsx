@@ -7,16 +7,83 @@ import Login from './components/Login'
 import Lecturers from './components/lecturers'
 import './App.css'
 
-function ConfirmModal({ isOpen, message, onConfirm, onCancel }) {
+function ConfirmModal({
+  isOpen,
+  message,
+  onConfirm,
+  onCancel,
+}) {
   if (!isOpen) return null
 
   return (
-    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-      <div style={{ backgroundColor: 'white', borderRadius: '10px', padding: '24px', maxWidth: '360px', width: '90%', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
-        <p style={{ marginBottom: '20px', fontSize: '15px', color: '#111827' }}>{message}</p>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-          <button onClick={onCancel} style={{ backgroundColor: '#e5e7eb', color: '#374151', padding: '8px 16px', borderRadius: '6px', border: 'none' }}>Cancel</button>
-          <button onClick={onConfirm} style={{ backgroundColor: '#dc2626', color: 'white', padding: '8px 16px', borderRadius: '6px', border: 'none' }}>Delete</button>
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000,
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: 'white',
+          borderRadius: '10px',
+          padding: '24px',
+          maxWidth: '360px',
+          width: '90%',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+        }}
+      >
+        <p
+          style={{
+            marginBottom: '20px',
+            fontSize: '15px',
+            color: '#111827',
+          }}
+        >
+          {message}
+        </p>
+
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            gap: '10px',
+          }}
+        >
+          <button
+            type="button"
+            onClick={onCancel}
+            style={{
+              backgroundColor: '#e5e7eb',
+              color: '#374151',
+              padding: '8px 16px',
+              borderRadius: '6px',
+              border: 'none',
+            }}
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            onClick={onConfirm}
+            style={{
+              backgroundColor: '#dc2626',
+              color: 'white',
+              padding: '8px 16px',
+              borderRadius: '6px',
+              border: 'none',
+            }}
+          >
+            Delete
+          </button>
         </div>
       </div>
     </div>
@@ -27,6 +94,10 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [activePage, setActivePage] = useState('dashboard')
 
+  // ================================
+  // STUDENTS
+  // ================================
+
   const [showForm, setShowForm] = useState(false)
   const [studentName, setStudentName] = useState('')
   const [department, setDepartment] = useState('')
@@ -34,6 +105,10 @@ function App() {
 
   const [students, setStudents] = useState([])
   const [showStudents, setShowStudents] = useState(false)
+
+  // ================================
+  // RESULTS
+  // ================================
 
   const [courseCode, setCourseCode] = useState('')
   const [courseTitle, setCourseTitle] = useState('')
@@ -45,39 +120,117 @@ function App() {
     const now = new Date()
     const year = now.getFullYear()
     const month = now.getMonth() + 1
-    const startYear = month >= 9 ? year : year - 1
-    return `${startYear}/${startYear + 1}`;
+
+    const startYear =
+      month >= 9 ? year : year - 1
+
+    return `${startYear}/${startYear + 1}`
   }
 
-  const [academicSession, setAcademicSession] = useState(getCurrentSession())
-  const [semester, setSemester] = useState('First Semester')
+  const [academicSession, setAcademicSession] =
+    useState(getCurrentSession())
 
-  const [selectedStudent, setSelectedStudent] = useState('')
+  const [semester, setSemester] =
+    useState('First Semester')
+
+  const [selectedStudent, setSelectedStudent] =
+    useState('')
+
   const [results, setResults] = useState([])
+
+  // ================================
+  // AUTH
+  // ================================
 
   const [session, setSession] = useState(null)
   const [authLoading, setAuthLoading] = useState(true)
   const [resetSent, setResetSent] = useState(false)
 
   const [newEmail, setNewEmail] = useState('')
-  const [emailUpdateSent, setEmailUpdateSent] = useState(false)
+  const [emailUpdateSent, setEmailUpdateSent] =
+    useState(false)
+
+  // ================================
+  // SETTINGS
+  // ================================
+
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] =
+    useState('')
+
+  const [showNewPassword, setShowNewPassword] =
+    useState(false)
+
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState(false)
+
+  const [settingsTheme, setSettingsTheme] = useState(
+    localStorage.getItem('studentManagerTheme') ||
+      'dark'
+  )
+
+  const [notificationsEnabled, setNotificationsEnabled] =
+    useState(
+      localStorage.getItem(
+        'studentManagerNotifications'
+      ) !== 'false'
+    )
+
+  const [settingsSession, setSettingsSession] =
+    useState(
+      localStorage.getItem('studentManagerSession') ||
+        getCurrentSession()
+    )
+
+  const [settingsSemester, setSettingsSemester] =
+    useState(
+      localStorage.getItem('studentManagerSemester') ||
+        'First Semester'
+    )
+
+  const [settingsSaved, setSettingsSaved] =
+    useState(false)
+
+  // ================================
+  // COURSE REGISTRATION
+  // ================================
 
   const [registrations, setRegistrations] = useState([])
-  const [regCourseCode, setRegCourseCode] = useState('')
-  const [regCourseTitle, setRegCourseTitle] = useState('')
-  const [regCourseUnit, setRegCourseUnit] = useState('')
-  const [regStudent, setRegStudent] = useState('')
+  const [regCourseCode, setRegCourseCode] =
+    useState('')
+  const [regCourseTitle, setRegCourseTitle] =
+    useState('')
+  const [regCourseUnit, setRegCourseUnit] =
+    useState('')
+  const [regStudent, setRegStudent] =
+    useState('')
 
-  const [checkResultsStudent, setCheckResultsStudent] = useState('')
+  const [checkResultsStudent, setCheckResultsStudent] =
+    useState('')
 
-  const [confirmState, setConfirmState] = useState({ isOpen: false, message: '', onConfirm: () => {} })
+  // ================================
+  // CONFIRMATION MODAL
+  // ================================
+
+  const [confirmState, setConfirmState] = useState({
+    isOpen: false,
+    message: '',
+    onConfirm: () => {},
+  })
 
   const askConfirm = (message, onConfirm) => {
-    setConfirmState({ isOpen: true, message, onConfirm })
+    setConfirmState({
+      isOpen: true,
+      message,
+      onConfirm,
+    })
   }
 
   const closeConfirm = () => {
-    setConfirmState((prev) => ({ ...prev, isOpen: false }))
+    setConfirmState((prev) => ({
+      ...prev,
+      isOpen: false,
+    }))
   }
 
   // ================================
@@ -86,19 +239,38 @@ function App() {
 
   const [materials, setMaterials] = useState([])
   const [lecturers, setLecturers] = useState([])
-  const [materialLecturer, setMaterialLecturer] = useState('')
 
-  const [materialCourseCode, setMaterialCourseCode] = useState('')
-  const [materialTitle, setMaterialTitle] = useState('')
-  const [materialLink, setMaterialLink] = useState('')
-  const [materialFile, setMaterialFile] = useState(null)
-  const [materialMode, setMaterialMode] = useState('upload')
+  const [materialLecturer, setMaterialLecturer] =
+    useState('')
+
+  const [materialCourseCode, setMaterialCourseCode] =
+    useState('')
+
+  const [materialTitle, setMaterialTitle] =
+    useState('')
+
+  const [materialLink, setMaterialLink] =
+    useState('')
+
+  const [materialFile, setMaterialFile] =
+    useState(null)
+
+  const [materialMode, setMaterialMode] =
+    useState('upload')
+
   const [uploading, setUploading] = useState(false)
 
-  const [editingMaterialId, setEditingMaterialId] = useState(null)
-  const [materialFileInputKey, setMaterialFileInputKey] = useState(0)
+  const [editingMaterialId, setEditingMaterialId] =
+    useState(null)
+
+  const [materialFileInputKey, setMaterialFileInputKey] =
+    useState(0)
 
   const [gpaStudent, setGpaStudent] = useState('')
+
+  // ================================
+  // PAGE TITLES
+  // ================================
 
   const pageTitles = {
     dashboard: 'Student Portal',
@@ -112,6 +284,10 @@ function App() {
     logout: 'Logout',
   }
 
+  // ================================
+  // GREETING
+  // ================================
+
   const getGreeting = () => {
     const hour = new Date().getHours()
 
@@ -121,26 +297,58 @@ function App() {
     return 'Good Evening'
   }
 
-  const today = new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+  const today = new Date().toLocaleDateString(
+    'en-US',
+    {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }
+  )
+
+  // ================================
+  // NOTIFICATIONS
+  // ================================
+
+  const showSuccess = (message) => {
+    if (notificationsEnabled) {
+      toast.success(message)
+    }
+  }
+
+  const showError = (message) => {
+    if (notificationsEnabled) {
+      toast.error(message)
+    }
+  }
+
+  // ================================
+  // DASHBOARD CALCULATIONS
+  // ================================
 
   const departmentCount = new Set(
-    students.map((s) => s.department)
+    students
+      .map((student) => student.department)
+      .filter(Boolean)
   ).size
 
+  // Combine courses from results and registrations.
   const knownCourses = (() => {
     const courseMap = {}
 
-    ;[...results, ...registrations].forEach((r) => {
-      if (r.course_code) {
-        courseMap[r.course_code] = {
-          code: r.course_code,
-          title: r.course_title,
-          unit: r.course_unit,
+    ;[...results, ...registrations].forEach((course) => {
+      if (!course.course_code) return
+
+      const code = course.course_code
+        .trim()
+        .toUpperCase()
+
+      if (!courseMap[code]) {
+        courseMap[code] = {
+          code,
+          title: course.course_title || '',
+          unit: Number(course.course_unit) || 0,
         }
       }
     })
@@ -148,13 +356,41 @@ function App() {
     return Object.values(courseMap)
   })()
 
+  // ================================
+  // ACCURATE GPA CALCULATOR
+  // ================================
+
+  const calculateGPA = (resultList) => {
+    if (!resultList || resultList.length === 0) {
+      return '0.00'
+    }
+
+    let totalUnits = 0
+    let totalQualityPoints = 0
+
+    resultList.forEach((result) => {
+      const unit = Number(result.course_unit) || 0
+      const gradePoint =
+        Number(result.grade_point) || 0
+
+      if (unit > 0) {
+        totalUnits += unit
+        totalQualityPoints +=
+          gradePoint * unit
+      }
+    })
+
+    if (totalUnits === 0) {
+      return '0.00'
+    }
+
+    return (
+      totalQualityPoints / totalUnits
+    ).toFixed(2)
+  }
+
   const averageGPA = (() => {
-    const totalUnits = results.reduce((sum, r) => sum + Number(r.course_unit), 0)
-    const totalPoints = results.reduce(
-      (sum, r) => sum + Number(r.grade_point) * Number(r.course_unit),
-      0
-    )
-    return totalUnits ? (totalPoints / totalUnits).toFixed(2) : '0.00'
+    return calculateGPA(results)
   })()
 
   // ================================
@@ -162,17 +398,94 @@ function App() {
   // ================================
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setAuthLoading(false)
-    })
+    let mounted = true
 
-    const { data: listener } =
-      supabase.auth.onAuthStateChange((_event, session) => {
+    const loadSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
+      if (mounted) {
         setSession(session)
-      })
+        setAuthLoading(false)
+      }
+    }
 
-    return () => listener.subscription.unsubscribe()
+    loadSession()
+
+    const {
+      data: listener,
+    } = supabase.auth.onAuthStateChange(
+      (_event, newSession) => {
+        if (mounted) {
+          setSession(newSession)
+        }
+      }
+    )
+
+    return () => {
+      mounted = false
+      listener.subscription.unsubscribe()
+    }
+  }, [])
+
+  // ================================
+  // LOAD SAVED THEME
+  // ================================
+
+  useEffect(() => {
+    const savedTheme =
+      localStorage.getItem(
+        'studentManagerTheme'
+      ) || 'dark'
+
+    document.body.classList.remove(
+      'light-theme',
+      'dark-theme'
+    )
+
+    document.body.classList.add(
+      `${savedTheme}-theme`
+    )
+  }, [])
+
+  // ================================
+  // APPLY THEME
+  // ================================
+
+  useEffect(() => {
+    document.body.classList.remove(
+      'light-theme',
+      'dark-theme'
+    )
+
+    document.body.classList.add(
+      `${settingsTheme}-theme`
+    )
+  }, [settingsTheme])
+
+  // ================================
+  // LOAD SAVED ACADEMIC SETTINGS
+  // ================================
+
+  useEffect(() => {
+    const savedSession =
+      localStorage.getItem(
+        'studentManagerSession'
+      )
+
+    const savedSemester =
+      localStorage.getItem(
+        'studentManagerSemester'
+      )
+
+    if (savedSession) {
+      setAcademicSession(savedSession)
+    }
+
+    if (savedSemester) {
+      setSemester(savedSemester)
+    }
   }, [])
 
   // ================================
@@ -181,59 +494,104 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data: studentData, error: studentError } =
-        await supabase
-          .from('students')
-          .select('*')
-          .order('created_at', { ascending: false })
+      const {
+        data: studentData,
+        error: studentError,
+      } = await supabase
+        .from('students')
+        .select('*')
+        .order('created_at', {
+          ascending: false,
+        })
 
-      const { data: resultData, error: resultError } =
-        await supabase
-          .from('results')
-          .select('*')
+      const {
+        data: resultData,
+        error: resultError,
+      } = await supabase
+        .from('results')
+        .select('*')
 
-      const { data: regData, error: regError } =
-        await supabase
-          .from('registrations')
-          .select('*')
+      const {
+        data: regData,
+        error: regError,
+      } = await supabase
+        .from('registrations')
+        .select('*')
 
-      const { data: materialData, error: materialError } =
-        await supabase
-          .from('materials')
-          .select('*')
-          .order('created_at', { ascending: false })
+      const {
+        data: materialData,
+        error: materialError,
+      } = await supabase
+        .from('materials')
+        .select('*')
+        .order('created_at', {
+          ascending: false,
+        })
 
-      const { data: lecturerData, error: lecturerError } =
-        await supabase
-          .from('lecturers')
-          .select('*')
-          .order('lecturer_name', { ascending: true })
+      const {
+        data: lecturerData,
+        error: lecturerError,
+      } = await supabase
+        .from('lecturers')
+        .select('*')
+        .order('lecturer_name', {
+          ascending: true,
+        })
 
       if (studentError) {
-        console.error('Error fetching students:', studentError)
+        console.error(
+          'Error fetching students:',
+          studentError
+        )
       }
 
       if (resultError) {
-        console.error('Error fetching results:', resultError)
+        console.error(
+          'Error fetching results:',
+          resultError
+        )
       }
 
       if (regError) {
-        console.error('Error fetching registrations:', regError)
+        console.error(
+          'Error fetching registrations:',
+          regError
+        )
       }
 
       if (materialError) {
-        console.error('Error fetching materials:', materialError)
+        console.error(
+          'Error fetching materials:',
+          materialError
+        )
       }
 
       if (lecturerError) {
-        console.error('Error fetching lecturers:', lecturerError)
+        console.error(
+          'Error fetching lecturers:',
+          lecturerError
+        )
       }
 
-      if (studentData) setStudents(studentData)
-      if (resultData) setResults(resultData)
-      if (regData) setRegistrations(regData)
-      if (materialData) setMaterials(materialData)
-      if (lecturerData) setLecturers(lecturerData)
+      if (studentData) {
+        setStudents(studentData)
+      }
+
+      if (resultData) {
+        setResults(resultData)
+      }
+
+      if (regData) {
+        setRegistrations(regData)
+      }
+
+      if (materialData) {
+        setMaterials(materialData)
+      }
+
+      if (lecturerData) {
+        setLecturers(lecturerData)
+      }
     }
 
     fetchData()
@@ -252,15 +610,21 @@ function App() {
     const { data, error } = await supabase
       .from('students')
       .select('*')
-      .order('created_at', { ascending: false })
+      .order('created_at', {
+        ascending: false,
+      })
 
     if (error) {
-      console.error('Error fetching students:', error)
-      toast.error('Failed to load students')
+      console.error(
+        'Error fetching students:',
+        error
+      )
+
+      showError('Failed to load students')
       return
     }
 
-    setStudents(data)
+    setStudents(data || [])
     setShowStudents(true)
   }
 
@@ -271,108 +635,340 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const { data, error } = await supabase
+    const cleanName = studentName.trim()
+    const cleanDepartment =
+      department.trim()
+    const cleanMatricNumber =
+      matricNumber.trim()
+
+    if (!cleanName) {
+      showError('Please enter the student name')
+      return
+    }
+
+    if (!cleanDepartment) {
+      showError('Please enter the department')
+      return
+    }
+
+    if (!cleanMatricNumber) {
+      showError('Please enter the matric number')
+      return
+    }
+
+    const {
+      data: existingStudent,
+      error: checkError,
+    } = await supabase
+      .from('students')
+      .select(
+        'id, student_name, matric_number'
+      )
+      .eq(
+        'matric_number',
+        cleanMatricNumber
+      )
+      .maybeSingle()
+
+    if (checkError) {
+      console.error(
+        'Error checking student:',
+        checkError
+      )
+
+      showError(
+        'Unable to check student information'
+      )
+
+      return
+    }
+
+    if (existingStudent) {
+      showError(
+        `Student already exists with matric number ${cleanMatricNumber}`
+      )
+
+      return
+    }
+
+    const {
+      data,
+      error,
+    } = await supabase
       .from('students')
       .insert([
         {
-          student_name: studentName,
-          department: department,
-          matric_number: matricNumber,
+          student_name: cleanName,
+          department: cleanDepartment,
+          matric_number:
+            cleanMatricNumber,
         },
       ])
       .select()
 
     if (error) {
-      console.error('Error saving student:', error)
-      toast.error('Failed to save student')
+      console.error(
+        'Error saving student:',
+        error
+      )
+
+      if (error.code === '23505') {
+        showError(
+          'Student already exists. This matric number is already registered.'
+        )
+
+        return
+      }
+
+      showError(
+        'Failed to save student: ' +
+          error.message
+      )
+
       return
     }
 
-    console.log('Student saved:', data)
-    toast.success(`${studentName} was added successfully!`)
+    showSuccess(
+      `${cleanName} was added successfully!`
+    )
 
     setStudentName('')
     setDepartment('')
     setMatricNumber('')
     setShowForm(false)
 
-    setStudents((prev) => [...data, ...prev])
+    setStudents((prev) => [
+      ...(data || []),
+      ...prev,
+    ])
   }
 
   // ================================
   // DELETE STUDENT
   // ================================
 
-  const deleteStudent = async (studentId, studentName) => {
-    const { error } = await supabase.from('students').delete().eq('id', studentId)
+  const deleteStudent = async (
+    studentId,
+    studentName
+  ) => {
+    const { error } = await supabase
+      .from('students')
+      .delete()
+      .eq('id', studentId)
+
     if (error) {
-      console.error('Error deleting student:', error)
-      toast.error('Failed to delete student')
+      console.error(
+        'Error deleting student:',
+        error
+      )
+
+      showError(
+        'Failed to delete student: ' +
+          error.message
+      )
+
       return
     }
-    setStudents((prev) => prev.filter((s) => s.id !== studentId))
-    toast.success(`${studentName} was deleted successfully!`)
+
+    setStudents((prev) =>
+      prev.filter(
+        (student) =>
+          student.id !== studentId
+      )
+    )
+
+    showSuccess(
+      `${studentName} was deleted successfully!`
+    )
   }
 
-  const handleDeleteStudent = (studentId, studentName) => {
-    askConfirm(`Are you sure you want to delete ${studentName}?`, () => {
-      closeConfirm()
-      deleteStudent(studentId, studentName)
-    })
+  const handleDeleteStudent = (
+    studentId,
+    studentName
+  ) => {
+    askConfirm(
+      `Are you sure you want to delete ${studentName}?`,
+      () => {
+        closeConfirm()
+        deleteStudent(
+          studentId,
+          studentName
+        )
+      }
+    )
   }
 
-  const deleteResult = async (resultId) => {
-    const { error } = await supabase.from('results').delete().eq('id', resultId)
+  // ================================
+  // DELETE RESULT
+  // ================================
+
+  const deleteResult = async (
+    resultId
+  ) => {
+    const { error } = await supabase
+      .from('results')
+      .delete()
+      .eq('id', resultId)
+
     if (error) {
-      console.error('Error deleting result:', error)
-      toast.error('Failed to delete result')
+      console.error(
+        'Error deleting result:',
+        error
+      )
+
+      showError(
+        'Failed to delete result: ' +
+          error.message
+      )
+
       return
     }
-    setResults((prev) => prev.filter((r) => r.id !== resultId))
-    toast.success('Result deleted successfully!')
+
+    setResults((prev) =>
+      prev.filter(
+        (result) =>
+          result.id !== resultId
+      )
+    )
+
+    showSuccess(
+      'Result deleted successfully!'
+    )
   }
 
   function handleDeleteResult(resultId) {
-    askConfirm('Are you sure you want to delete this result?', () => {
-      closeConfirm()
-      deleteResult(resultId)
-    })
+    askConfirm(
+      'Are you sure you want to delete this result?',
+      () => {
+        closeConfirm()
+        deleteResult(resultId)
+      }
+    )
   }
 
-  const deleteRegistration = async (registrationId) => {
-    const { error } = await supabase.from('registrations').delete().eq('id', registrationId)
+  // ================================
+  // DELETE REGISTRATION
+  // ================================
+
+  const deleteRegistration = async (
+    registrationId
+  ) => {
+    const { error } = await supabase
+      .from('registrations')
+      .delete()
+      .eq('id', registrationId)
+
     if (error) {
-      console.error('Error deleting registration:', error)
-      toast.error('Failed to remove registration')
+      console.error(
+        'Error deleting registration:',
+        error
+      )
+
+      showError(
+        'Failed to remove registration: ' +
+          error.message
+      )
+
       return
     }
-    setRegistrations((prev) => prev.filter((r) => r.id !== registrationId))
-    toast.success('Course registration removed successfully!')
+
+    setRegistrations((prev) =>
+      prev.filter(
+        (registration) =>
+          registration.id !==
+          registrationId
+      )
+    )
+
+    showSuccess(
+      'Course registration removed successfully!'
+    )
   }
 
-  function handleDeleteRegistration(registrationId) {
-    askConfirm('Are you sure you want to remove this course registration?', () => {
-      closeConfirm()
-      deleteRegistration(registrationId)
-    })
+  function handleDeleteRegistration(
+    registrationId
+  ) {
+    askConfirm(
+      'Are you sure you want to remove this course registration?',
+      () => {
+        closeConfirm()
+        deleteRegistration(
+          registrationId
+        )
+      }
+    )
   }
 
-  const deleteMaterial = async (materialId) => {
-    const { error } = await supabase.from('materials').delete().eq('id', materialId)
+  // ================================
+  // DELETE MATERIAL
+  // ================================
+
+  const deleteMaterial = async (
+    materialId
+  ) => {
+    const material =
+      materials.find(
+        (item) =>
+          item.id === materialId
+      )
+
+    const { error } = await supabase
+      .from('materials')
+      .delete()
+      .eq('id', materialId)
+
     if (error) {
-      console.error('Error deleting material:', error)
-      toast.error('Failed to delete material')
+      console.error(
+        'Error deleting material:',
+        error
+      )
+
+      showError(
+        'Failed to delete material: ' +
+          error.message
+      )
+
       return
     }
-    setMaterials((prev) => prev.filter((m) => m.id !== materialId))
-    toast.success('Material deleted successfully!')
+
+    setMaterials((prev) =>
+      prev.filter(
+        (item) =>
+          item.id !== materialId
+      )
+    )
+
+    if (
+      editingMaterialId === materialId
+    ) {
+      setEditingMaterialId(null)
+      setMaterialCourseCode('')
+      setMaterialLecturer('')
+      setMaterialTitle('')
+      setMaterialLink('')
+      setMaterialFile(null)
+      setMaterialFileInputKey(
+        (prev) => prev + 1
+      )
+    }
+
+    showSuccess(
+      material
+        ? `"${material.title}" deleted successfully!`
+        : 'Material deleted successfully!'
+    )
   }
 
-  function handleDeleteMaterial(materialId) {
-    askConfirm('Are you sure you want to delete this material?', () => {
-      closeConfirm()
-      deleteMaterial(materialId)
-    })
+  function handleDeleteMaterial(
+    materialId
+  ) {
+    askConfirm(
+      'Are you sure you want to delete this material?',
+      () => {
+        closeConfirm()
+        deleteMaterial(materialId)
+      }
+    )
   }
 
   // ================================
@@ -382,22 +978,86 @@ function App() {
   const handleResultSubmit = async (e) => {
     e.preventDefault()
 
+    const cleanCourseCode =
+      courseCode.trim().toUpperCase()
+
+    const cleanCourseTitle =
+      courseTitle.trim()
+
+    const unit = Number(courseUnit)
+    const numericScore = Number(score)
+
+    if (!selectedStudent) {
+      showError('Please select a student')
+      return
+    }
+
+    if (!cleanCourseCode) {
+      showError('Please enter a course code')
+      return
+    }
+
+    if (!cleanCourseTitle) {
+      showError('Please enter a course title')
+      return
+    }
+
+    if (!Number.isFinite(unit) || unit <= 0) {
+      showError(
+        'Course unit must be greater than 0'
+      )
+      return
+    }
+
+    if (
+      !Number.isFinite(numericScore) ||
+      numericScore < 0 ||
+      numericScore > 100
+    ) {
+      showError(
+        'Score must be between 0 and 100'
+      )
+      return
+    }
+
+    // Prevent duplicate result for the same
+    // student, course and semester.
+    const duplicateResult =
+      results.find(
+        (result) =>
+          String(result.student_id) ===
+            String(selectedStudent) &&
+          String(
+            result.course_code
+          ).toUpperCase() ===
+            cleanCourseCode &&
+          String(result.session || '') ===
+            `${academicSession} - ${semester}`
+      )
+
+    if (duplicateResult) {
+      showError(
+        'This student already has a result for this course in this semester.'
+      )
+      return
+    }
+
     let grade = ''
     let gradePoint = 0
 
-    if (score >= 70) {
+    if (numericScore >= 70) {
       grade = 'A'
       gradePoint = 5
-    } else if (score >= 60) {
+    } else if (numericScore >= 60) {
       grade = 'B'
       gradePoint = 4
-    } else if (score >= 50) {
+    } else if (numericScore >= 50) {
       grade = 'C'
       gradePoint = 3
-    } else if (score >= 45) {
+    } else if (numericScore >= 45) {
       grade = 'D'
       gradePoint = 2
-    } else if (score >= 40) {
+    } else if (numericScore >= 40) {
       grade = 'E'
       gradePoint = 1
     } else {
@@ -405,37 +1065,54 @@ function App() {
       gradePoint = 0
     }
 
-    const { data, error } = await supabase
+    const {
+      data,
+      error,
+    } = await supabase
       .from('results')
       .insert([
         {
           student_id: selectedStudent,
-          course_code: courseCode,
-          course_title: courseTitle,
-          course_unit: courseUnit,
-          score: Number(score),
-          grade: grade,
+          course_code: cleanCourseCode,
+          course_title: cleanCourseTitle,
+          course_unit: unit,
+          score: numericScore,
+          grade,
           grade_point: gradePoint,
-          session: `${academicSession} - ${semester}`,
+          session:
+            `${academicSession} - ${semester}`,
         },
       ])
       .select()
 
     if (error) {
-      console.error('Error saving result:', error)
-      toast.error('Failed to save result')
+      console.error(
+        'Error saving result:',
+        error
+      )
+
+      showError(
+        'Failed to save result: ' +
+          error.message
+      )
+
       return
     }
 
-    console.log('Result saved:', data)
-    toast.success('Result added successfully!')
+    showSuccess(
+      'Result added successfully!'
+    )
 
-    setResults((prev) => [...data, ...prev])
+    setResults((prev) => [
+      ...(data || []),
+      ...prev,
+    ])
 
     setCourseCode('')
     setCourseTitle('')
     setCourseUnit('')
     setScore('')
+    setSelectedStudent('')
     setShowResultForm(false)
   }
 
@@ -443,207 +1120,706 @@ function App() {
   // REGISTER COURSE
   // ================================
 
-  const handleRegisterCourse = async (e) => {
-    e.preventDefault()
+  const handleRegisterCourse =
+    async (e) => {
+      e.preventDefault()
 
-    if (!regStudent) {
-      toast.error('Please select a student')
-      return
-    }
+      if (!regStudent) {
+        showError(
+          'Please select a student'
+        )
+        return
+      }
 
-    if (!regCourseCode) {
-      toast.error('Please select a course')
-      return
-    }
+      if (!regCourseCode) {
+        showError(
+          'Please select a course'
+        )
+        return
+      }
 
-    if (!regCourseUnit) {
-      toast.error('Please select the course unit')
-      return
-    }
+      if (!regCourseUnit) {
+        showError(
+          'Please select the course unit'
+        )
+        return
+      }
 
-    const alreadyRegistered = registrations.some(
-     (r) => String(r.student_id) === String(regStudent) && r.course_code === regCourseCode
-)
-    if (alreadyRegistered) {
-      toast.error('This student is already registered for this course')
+      const alreadyRegistered =
+        registrations.some(
+          (registration) =>
+            String(
+              registration.student_id
+            ) === String(regStudent) &&
+            String(
+              registration.course_code
+            ).toUpperCase() ===
+              String(
+                regCourseCode
+              ).toUpperCase()
+        )
+
+      if (alreadyRegistered) {
+        showError(
+          'This student is already registered for this course'
+        )
+
+        setRegStudent('')
+        setRegCourseCode('')
+        setRegCourseTitle('')
+        setRegCourseUnit('')
+
+        return
+      }
+
+      const {
+        data,
+        error,
+      } = await supabase
+        .from('registrations')
+        .insert([
+          {
+            student_id: regStudent,
+            course_code:
+              String(
+                regCourseCode
+              )
+                .trim()
+                .toUpperCase(),
+            course_title:
+              regCourseTitle.trim(),
+            course_unit:
+              Number(regCourseUnit),
+          },
+        ])
+        .select()
+
+      if (error) {
+        console.error(
+          'Error registering course:',
+          error
+        )
+
+        showError(
+          `Failed to register course: ${error.message}`
+        )
+
+        return
+      }
+
+      setRegistrations((prev) => [
+        ...prev,
+        ...(data || []),
+      ])
+
+      showSuccess(
+        'Course registered successfully!'
+      )
+
       setRegStudent('')
       setRegCourseCode('')
       setRegCourseTitle('')
       setRegCourseUnit('')
-      
-      return
-}
-
-    const { data, error } = await supabase
-      .from('registrations')
-      .insert([
-        {
-          student_id: regStudent,
-          course_code: regCourseCode,
-          course_title: regCourseTitle,
-          course_unit: Number(regCourseUnit),
-        },
-      ])
-      .select()
-
-    if (error) {
-      console.error('Error registering course:', error)
-      toast.error(`Failed to register course: ${error.message}`)
-      return
     }
 
-    setRegistrations((prev) => [...prev, ...data])
+  // ================================
+  // EDIT MATERIAL
+  // ================================
 
-    toast.success('Course registered successfully!')
+  const handleEditMaterial = (
+    material
+  ) => {
+    if (!material) return
 
-    setRegStudent('')
-    setRegCourseCode('')
-    setRegCourseTitle('')
-    setRegCourseUnit('')
+    setEditingMaterialId(material.id)
+
+    setMaterialCourseCode(
+      material.course_code || ''
+    )
+
+    setMaterialLecturer(
+      material.lecturer_id
+        ? String(material.lecturer_id)
+        : ''
+    )
+
+    setMaterialTitle(
+      material.title || ''
+    )
+
+    if (
+      String(material.file_type || '')
+        .toLowerCase() === 'link'
+    ) {
+      setMaterialMode('link')
+      setMaterialLink(
+        material.link || ''
+      )
+    } else {
+      setMaterialMode('upload')
+      setMaterialLink('')
+    }
+
+    // Important:
+    // Never keep an old file selected.
+    setMaterialFile(null)
+
+    // Force the file input to reset.
+    setMaterialFileInputKey(
+      (prev) => prev + 1
+    )
+
+    // Scroll to form safely.
+    setTimeout(() => {
+      const form =
+        document.querySelector(
+          '.material-form'
+        )
+
+      if (form) {
+        form.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        })
+      }
+    }, 200)
   }
 
   // ================================
-  // ADD / UPDATE COURSE MATERIAL
+  // ADD / UPDATE MATERIAL
   // ================================
 
   const handleAddMaterial = async (e) => {
     e.preventDefault()
+
     if (!materialCourseCode) {
-      toast.error("Please select a course")
+      showError(
+        'Please select a course'
+      )
       return
     }
 
     if (!materialLecturer) {
-      toast.error('Please select a lecturer')
+      showError(
+        'Please select a lecturer'
+      )
       return
     }
 
-    if (!materialTitle) {
-      toast.error('Please enter a material title')
+    if (!materialTitle.trim()) {
+      showError(
+        'Please enter a material title'
+      )
       return
     }
 
-    const duplicate = materials.find(
-      (m) =>
-        m.course_code === materialCourseCode &&
-        m.title.trim().toLowerCase() === materialTitle.trim().toLowerCase() &&
-        m.id !== editingMaterialId
+    const cleanCourseCode =
+      materialCourseCode
+        .trim()
+        .toUpperCase()
+
+    const cleanTitle =
+      materialTitle.trim()
+
+    // Find an existing material with the
+    // same course + title.
+    const duplicate =
+      materials.find(
+        (material) =>
+          String(
+            material.course_code || ''
+          ).toUpperCase() ===
+            cleanCourseCode &&
+          String(
+            material.title || ''
+          )
+            .trim()
+            .toLowerCase() ===
+            cleanTitle.toLowerCase() &&
+          material.id !==
+            editingMaterialId
+      )
+
+    // If editing, use the selected material.
+    // If adding a duplicate, update it instead.
+    const targetId =
+      editingMaterialId ||
+      duplicate?.id ||
+      null
+
+    setUploading(true)
+
+    try {
+      let newLink = ''
+      let newFileType = ''
+
+      // =================================
+      // UPLOAD MODE
+      // =================================
+
+      if (
+        materialMode === 'upload'
+      ) {
+        // When adding a new material,
+        // a file is required.
+        if (
+          !materialFile &&
+          !targetId
+        ) {
+          showError(
+            'Please choose a file to upload'
+          )
+          return
+        }
+
+        // When editing, a new file is
+        // optional. If no new file is
+        // selected, the existing file stays.
+        if (materialFile) {
+          const fileExt =
+            materialFile.name
+              .split('.')
+              .pop()
+              .toLowerCase()
+
+          const safeFileName =
+            materialFile.name.replace(
+              /[^a-zA-Z0-9._-]/g,
+              '_'
+            )
+
+          const fileName =
+            `${Date.now()}-${safeFileName}`
+
+          const {
+            error: uploadError,
+          } = await supabase.storage
+            .from('materials')
+            .upload(
+              fileName,
+              materialFile
+            )
+
+          if (uploadError) {
+            console.error(
+              'Upload error:',
+              uploadError
+            )
+
+            showError(
+              'Failed to upload file: ' +
+                uploadError.message
+            )
+
+            return
+          }
+
+          const {
+            data:
+              publicUrlData,
+          } =
+            supabase.storage
+              .from('materials')
+              .getPublicUrl(
+                fileName
+              )
+
+          newLink =
+            publicUrlData?.publicUrl ||
+            ''
+
+          newFileType =
+            fileExt
+        }
+      }
+
+      // =================================
+      // LINK MODE
+      // =================================
+
+      if (
+        materialMode === 'link'
+      ) {
+        if (
+          !materialLink.trim()
+        ) {
+          showError(
+            'Please paste a link'
+          )
+          return
+        }
+
+        newLink =
+          materialLink.trim()
+
+        newFileType = 'link'
+      }
+
+      // =================================
+      // UPDATE EXISTING MATERIAL
+      // =================================
+
+      if (targetId) {
+        const payload = {
+          course_code:
+            cleanCourseCode,
+          lecturer_id:
+            materialLecturer,
+          title: cleanTitle,
+        }
+
+        // Only replace the existing
+        // file when a new file was
+        // actually selected.
+        if (
+          materialMode ===
+            'upload' &&
+          materialFile
+        ) {
+          payload.link = newLink
+          payload.file_type =
+            newFileType
+        }
+
+        // Link mode always updates
+        // the link.
+        if (
+          materialMode === 'link'
+        ) {
+          payload.link = newLink
+          payload.file_type =
+            newFileType
+        }
+
+        const {
+          error,
+        } = await supabase
+          .from('materials')
+          .update(payload)
+          .eq('id', targetId)
+
+        if (error) {
+          console.error(
+            'Update material error:',
+            error
+          )
+
+          showError(
+            'Failed to update material: ' +
+              error.message
+          )
+
+          return
+        }
+
+        // Update the screen immediately
+        // after successful database update.
+        setMaterials((prev) =>
+          prev.map(
+            (material) =>
+              material.id === targetId
+                ? {
+                    ...material,
+                    ...payload,
+                  }
+                : material
+          )
+        )
+
+        showSuccess(
+          'Material updated successfully!'
+        )
+      }
+
+      // =================================
+      // ADD NEW MATERIAL
+      // =================================
+
+      else {
+        const payload = {
+          course_code:
+            cleanCourseCode,
+          lecturer_id:
+            materialLecturer,
+          title: cleanTitle,
+          link: newLink,
+          file_type:
+            newFileType,
+        }
+
+        const {
+          data,
+          error,
+        } = await supabase
+          .from('materials')
+          .insert([payload])
+          .select()
+          .single()
+
+        if (error) {
+          console.error(
+            'Add material error:',
+            error
+          )
+
+          showError(
+            'Failed to add material: ' +
+              error.message
+          )
+
+          return
+        }
+
+        setMaterials((prev) => [
+          data,
+          ...prev,
+        ])
+
+        showSuccess(
+          'Material added successfully!'
+        )
+      }
+
+      // =================================
+      // RESET MATERIAL FORM
+      // =================================
+
+      setMaterialCourseCode('')
+      setMaterialLecturer('')
+      setMaterialTitle('')
+      setMaterialLink('')
+      setMaterialFile(null)
+      setMaterialMode('upload')
+      setEditingMaterialId(null)
+
+      // This clears the actual
+      // browser file input.
+      setMaterialFileInputKey(
+        (prev) => prev + 1
+      )
+    } catch (error) {
+      console.error(
+        'Material error:',
+        error
+      )
+
+      showError(
+        'Something went wrong while processing the material.'
+      )
+    } finally {
+      setUploading(false)
+    }
+  }
+
+  // ================================
+  // SETTINGS FUNCTIONS
+  // ================================
+
+  async function handleChangePassword(e) {
+    e.preventDefault()
+
+    if (
+      !newPassword ||
+      !confirmPassword
+    ) {
+      showError(
+        'Please enter both password fields'
+      )
+      return
+    }
+
+    if (newPassword.length < 6) {
+      showError(
+        'Password must be at least 6 characters'
+      )
+      return
+    }
+
+    if (
+      newPassword !==
+      confirmPassword
+    ) {
+      showError(
+        'Passwords do not match'
+      )
+      return
+    }
+
+    const {
+      error,
+    } =
+      await supabase.auth.updateUser({
+        password: newPassword,
+      })
+
+    if (error) {
+      console.error(
+        'Password update error:',
+        error
+      )
+
+      showError(
+        'Failed to change password: ' +
+          error.message
+      )
+
+      return
+    }
+
+    setNewPassword('')
+    setConfirmPassword('')
+    setShowNewPassword(false)
+    setShowConfirmPassword(false)
+
+    showSuccess(
+      'Password changed successfully!'
+    )
+  }
+
+  const saveSettings = () => {
+    localStorage.setItem(
+      'studentManagerTheme',
+      settingsTheme
     )
 
-    const targetId = editingMaterialId || duplicate?.id || null
+    localStorage.setItem(
+      'studentManagerNotifications',
+      String(
+        notificationsEnabled
+      )
+    )
 
-    let link = materialLink
-    let fileType = 'link'
+    localStorage.setItem(
+      'studentManagerSession',
+      settingsSession
+    )
 
-    if (materialMode === 'upload') {
-      if (!materialFile) {
-        if (!targetId) {
-          toast.error('Please choose a file to upload')
-          return
-        }
-      } else {
-        setUploading(true)
+    localStorage.setItem(
+      'studentManagerSemester',
+      settingsSemester
+    )
 
-        const fileExt = materialFile.name.split('.').pop()
-        const fileName = `${Date.now()}-${materialFile.name}`
+    document.body.classList.remove(
+      'light-theme',
+      'dark-theme'
+    )
 
-        const { error: uploadError } = await supabase.storage
-          .from('materials')
-          .upload(fileName, materialFile)
+    document.body.classList.add(
+      `${settingsTheme}-theme`
+    )
 
-        if (uploadError) {
-          console.error('Error uploading file:', uploadError)
-          toast.error('Failed to upload file: ' + uploadError.message)
-          setUploading(false)
-          return
-        }
+    setAcademicSession(
+      settingsSession
+    )
 
-        const { data: publicUrlData } = supabase.storage
-          .from('materials')
-          .getPublicUrl(fileName)
+    setSemester(
+      settingsSemester
+    )
 
-        link = publicUrlData.publicUrl
-        fileType = fileExt
-      }
-    } else {
-      if (!materialLink) {
-        toast.error('Please paste a link')
-        return
-      }
+    setSettingsSaved(true)
+
+    if (notificationsEnabled) {
+      toast.success(
+        'Settings saved successfully!'
+      )
     }
 
-    const payload = {
-      course_code: materialCourseCode,
-      lecturer_id: materialLecturer,
-      title: materialTitle,
-      ...(link ? { link, file_type: fileType } : {}),
-    }
-    
-    if (targetId) {
-  const { data, error } = await supabase
-    .from('materials')
-    .update(payload)
-    .eq('id', targetId)
-    .select()
-
-  setUploading(false)
-
-  if (error) {
-    console.error('Error updating material:', error)
-    toast.error('Failed to update material: ' + error.message)
-    return
+    setTimeout(() => {
+      setSettingsSaved(false)
+    }, 2000)
   }
 
-  const updatedMaterial =
-    data && data[0]
-      ? data[0]
-      : { ...materials.find((m) => m.id === targetId), ...payload }
+  function resetSettings() {
+    const defaultTheme = 'dark'
+    const defaultNotifications = true
+    const defaultSession =
+      getCurrentSession()
+    const defaultSemester =
+      'First Semester'
 
-  setMaterials((prev) =>
-    prev.map((m) => (m.id === targetId ? updatedMaterial : m))
-  )
-  toast.success('Material updated successfully!') 
-} else  {
-      const { data, error } = await supabase
-        .from('materials')
-        .insert([payload])
-        .select()
+    setSettingsTheme(
+      defaultTheme
+    )
 
-      setUploading(false)
+    setNotificationsEnabled(
+      defaultNotifications
+    )
 
-      if (error) {
-        console.error('Error adding material:', error)
-        toast.error('Failed to add material: ' + error.message)
-        return
-      }
+    setSettingsSession(
+      defaultSession
+    )
 
-      setMaterials((prev) => [...data, ...prev])
-      toast.success('Material added successfully!')
-    }
+    setSettingsSemester(
+      defaultSemester
+    )
 
-    setMaterialCourseCode('')
-    setMaterialLecturer('')
-    setMaterialTitle('')
-    setMaterialLink('')
-    setMaterialFile(null)
-    setEditingMaterialId(null)
-    setMaterialFileInputKey((prev) => prev + 1)
+    localStorage.setItem(
+      'studentManagerTheme',
+      defaultTheme
+    )
+
+    localStorage.setItem(
+      'studentManagerNotifications',
+      'true'
+    )
+
+    localStorage.setItem(
+      'studentManagerSession',
+      defaultSession
+    )
+
+    localStorage.setItem(
+      'studentManagerSemester',
+      defaultSemester
+    )
+
+    document.body.classList.remove(
+      'light-theme',
+      'dark-theme'
+    )
+
+    document.body.classList.add(
+      'dark-theme'
+    )
+
+    setAcademicSession(
+      defaultSession
+    )
+
+    setSemester(
+      defaultSemester
+    )
+
+    toast.success(
+      'Settings restored to default'
+    )
   }
 
-  const handleEditMaterial = (material) => {
-    setEditingMaterialId(material.id)
-    setMaterialCourseCode(material.course_code)
-    setMaterialLecturer(String(material.lecturer_id))
-    setMaterialTitle(material.title)
-    setMaterialMode(material.file_type === 'link' ? 'link' : 'upload')
-    setMaterialLink(material.file_type === 'link' ? material.link : '')
+  async function handleSettingsLogout() {
+    const {
+      error,
+    } =
+      await supabase.auth.signOut()
+
+    if (error) {
+      showError(
+        'Failed to sign out'
+      )
+      return
+    }
+
+    showSuccess(
+      'Signed out successfully'
+    )
+
+    setActivePage('dashboard')
   }
 
   // ================================
   // LOGOUT
   // ================================
 
-  const handleLogout = async () => {
+  async function handleLogout() {
     await supabase.auth.signOut()
     setActivePage('dashboard')
   }
@@ -652,43 +1828,98 @@ function App() {
   // PASSWORD RESET
   // ================================
 
-  const handlePasswordReset = async () => {
-    const { error } =
-      await supabase.auth.resetPasswordForEmail(
-        session.user.email
+  const handlePasswordReset =
+    async () => {
+      if (!session?.user?.email) {
+        showError(
+          'No account email found'
+        )
+        return
+      }
+
+      const {
+        error,
+      } =
+        await supabase.auth.resetPasswordForEmail(
+          session.user.email
+        )
+
+      if (error) {
+        showError(
+          'Failed to send reset email: ' +
+            error.message
+        )
+        return
+      }
+
+      setResetSent(true)
+
+      showSuccess(
+        'Password reset email sent!'
       )
-
-    if (error) {
-      toast.error('Failed to send reset email')
-      return
     }
-
-    setResetSent(true)
-  }
 
   // ================================
   // EMAIL UPDATE
   // ================================
 
-  const handleEmailUpdate = async (e) => {
-    e.preventDefault()
+  const handleEmailUpdate =
+    async (e) => {
+      e.preventDefault()
 
-    const { error } =
-      await supabase.auth.updateUser({
-        email: newEmail,
-      })
+      const cleanEmail =
+        newEmail
+          .trim()
+          .toLowerCase()
 
-    if (error) {
-      toast.error(
-        'Failed to update email: ' +
-          error.message
+      if (!cleanEmail) {
+        showError(
+          'Please enter a new email address'
+        )
+        return
+      }
+
+      if (
+        cleanEmail ===
+        (
+          session?.user?.email ||
+          ''
+        ).toLowerCase()
+      ) {
+        showError(
+          'This is already your current email'
+        )
+        return
+      }
+
+      const {
+        error,
+      } =
+        await supabase.auth.updateUser({
+          email: cleanEmail,
+        })
+
+      if (error) {
+        console.error(
+          'Email update error:',
+          error
+        )
+
+        showError(
+          'Failed to update email: ' +
+            error.message
+        )
+
+        return
+      }
+
+      setEmailUpdateSent(true)
+      setNewEmail('')
+
+      showSuccess(
+        'Confirmation email sent to your new address!'
       )
-      return
     }
-
-    setEmailUpdateSent(true)
-    setNewEmail('')
-  }
 
   // ================================
   // LOADING / LOGIN
@@ -703,7 +1934,11 @@ function App() {
   }
 
   if (!session) {
-    return <Login onLogin={setSession} />
+    return (
+      <Login
+        onLogin={setSession}
+      />
+    )
   }
 
   // ================================
@@ -714,23 +1949,49 @@ function App() {
     <div className="app-container">
 
       <Toaster position="top-right" />
-      <ConfirmModal isOpen={confirmState.isOpen} message={confirmState.message} onConfirm={confirmState.onConfirm} onCancel={closeConfirm} />
+
+      <ConfirmModal
+        isOpen={
+          confirmState.isOpen
+        }
+        message={
+          confirmState.message
+        }
+        onConfirm={
+          confirmState.onConfirm
+        }
+        onCancel={
+          closeConfirm
+        }
+      />
 
       <Sidebar
         isOpen={sidebarOpen}
         activePage={activePage}
-        setActivePage={setActivePage}
-        onClose={() => setSidebarOpen(false)}
-        onLogout={handleLogout}
+        setActivePage={
+          setActivePage
+        }
+        onClose={() =>
+          setSidebarOpen(false)
+        }
+        onLogout={
+          handleLogout
+        }
       />
 
       <div className="main-section">
 
         <Navbar
           onMenuClick={() =>
-            setSidebarOpen(!sidebarOpen)
+            setSidebarOpen(
+              !sidebarOpen
+            )
           }
-          pageTitle={pageTitles[activePage]}
+          pageTitle={
+            pageTitles[
+              activePage
+            ]
+          }
         />
 
         <main className="main-content">
@@ -739,12 +2000,15 @@ function App() {
               DASHBOARD
           ================================= */}
 
-          {activePage === 'dashboard' && (
+          {activePage ===
+            'dashboard' && (
             <>
+
               <div className="dashboard-intro">
 
                 <h1>
-                  {getGreeting()}, Welcome Back 👋
+                  {getGreeting()},
+                  Welcome Back 👋
                 </h1>
 
                 <p className="intro-date">
@@ -767,8 +2031,8 @@ function App() {
                   department
                   {departmentCount !== 1
                     ? 's'
-                    : ''}
-                  , with{' '}
+                    : ''},
+                  with{' '}
                   <strong>
                     {results.length}
                   </strong>{' '}
@@ -784,7 +2048,10 @@ function App() {
               <div className="dashboard-header">
 
                 <div>
-                  <h1>Dashboard</h1>
+                  <h1>
+                    Dashboard
+                  </h1>
+
                   <p>
                     Welcome back to your school
                     management system.
@@ -792,6 +2059,7 @@ function App() {
                 </div>
 
                 <button
+                  type="button"
                   onClick={() =>
                     setShowForm(true)
                   }
@@ -810,7 +2078,10 @@ function App() {
                   </div>
 
                   <div>
-                    <p>Total Students</p>
+                    <p>
+                      Total Students
+                    </p>
+
                     <h2>
                       {students.length}
                     </h2>
@@ -825,7 +2096,10 @@ function App() {
                   </div>
 
                   <div>
-                    <p>Total Results</p>
+                    <p>
+                      Total Results
+                    </p>
+
                     <h2>
                       {results.length}
                     </h2>
@@ -840,7 +2114,10 @@ function App() {
                   </div>
 
                   <div>
-                    <p>Average GPA</p>
+                    <p>
+                      Average GPA
+                    </p>
+
                     <h2>
                       {averageGPA}
                     </h2>
@@ -855,14 +2132,19 @@ function App() {
                   </div>
 
                   <div>
-                    <p>Total Course</p>
+                    <p>
+                      Total Course
+                    </p>
+
                     <h2>
                       {
                         new Set(
-                          results.map(
-                            (r) =>
-                              r.course_code
-                          )
+                          results
+                            .map(
+                              (result) =>
+                                result.course_code
+                            )
+                            .filter(Boolean)
                         ).size
                       }
                     </h2>
@@ -872,15 +2154,23 @@ function App() {
 
               </div>
 
-              <button onClick={viewStudents}>
+              <button
+                type="button"
+                onClick={
+                  viewStudents
+                }
+              >
                 {showStudents
                   ? 'Hide Students'
                   : 'View Students'}
               </button>
 
               <button
+                type="button"
                 onClick={() =>
-                  setShowResultForm(true)
+                  setShowResultForm(
+                    true
+                  )
                 }
               >
                 Add Result
@@ -902,7 +2192,9 @@ function App() {
                   >
 
                     <select
-                      value={selectedStudent}
+                      value={
+                        selectedStudent
+                      }
                       onChange={(e) =>
                         setSelectedStudent(
                           e.target.value
@@ -910,15 +2202,22 @@ function App() {
                       }
                       required
                     >
+
                       <option value="">
                         Select Student
                       </option>
 
                       {students.map(
-                        (student) => (
+                        (
+                          student
+                        ) => (
                           <option
-                            key={student.id}
-                            value={student.id}
+                            key={
+                              student.id
+                            }
+                            value={
+                              student.id
+                            }
                           >
                             {
                               student.student_name
@@ -937,13 +2236,16 @@ function App() {
                     <br />
 
                     <select
-                      value={academicSession}
+                      value={
+                        academicSession
+                      }
                       onChange={(e) =>
                         setAcademicSession(
                           e.target.value
                         )
                       }
                     >
+
                       {[0, -1, -2, 1].map(
                         (offset) => {
                           const now =
@@ -953,7 +2255,8 @@ function App() {
                             now.getFullYear()
 
                           const month =
-                            now.getMonth() + 1
+                            now.getMonth() +
+                            1
 
                           const baseStart =
                             month >= 9
@@ -964,18 +2267,24 @@ function App() {
                             baseStart +
                             offset
 
-                          const label = `${startYear}/${startYear + 1}`
+                          const label =
+                            `${startYear}/${startYear + 1}`
 
                           return (
                             <option
-                              key={label}
-                              value={label}
+                              key={
+                                label
+                              }
+                              value={
+                                label
+                              }
                             >
                               {label}
                             </option>
                           )
                         }
                       )}
+
                     </select>
 
                     <br />
@@ -989,6 +2298,7 @@ function App() {
                         )
                       }
                     >
+
                       <option value="First Semester">
                         First Semester
                       </option>
@@ -996,6 +2306,7 @@ function App() {
                       <option value="Second Semester">
                         Second Semester
                       </option>
+
                     </select>
 
                     <br />
@@ -1004,7 +2315,9 @@ function App() {
                     <input
                       type="text"
                       placeholder="Course Code"
-                      value={courseCode}
+                      value={
+                        courseCode
+                      }
                       onChange={(e) =>
                         setCourseCode(
                           e.target.value
@@ -1019,7 +2332,9 @@ function App() {
                     <input
                       type="text"
                       placeholder="Course Title"
-                      value={courseTitle}
+                      value={
+                        courseTitle
+                      }
                       onChange={(e) =>
                         setCourseTitle(
                           e.target.value
@@ -1034,12 +2349,15 @@ function App() {
                     <input
                       type="number"
                       placeholder="Course Unit"
-                      value={courseUnit}
+                      value={
+                        courseUnit
+                      }
                       onChange={(e) =>
                         setCourseUnit(
                           e.target.value
                         )
                       }
+                      min="1"
                       required
                     />
 
@@ -1069,9 +2387,14 @@ function App() {
 
                     <button
                       type="button"
-                      onClick={() =>
+                      onClick={() => {
                         setShowResultForm(false)
-                      }
+                        setSelectedStudent('')
+                        setCourseCode('')
+                        setCourseTitle('')
+                        setCourseUnit('')
+                        setScore('')
+                      }}
                     >
                       Cancel
                     </button>
@@ -1091,13 +2414,17 @@ function App() {
                   </h2>
 
                   <form
-                    onSubmit={handleSubmit}
+                    onSubmit={
+                      handleSubmit
+                    }
                   >
 
                     <input
                       type="text"
                       placeholder="Student Name"
-                      value={studentName}
+                      value={
+                        studentName
+                      }
                       onChange={(e) =>
                         setStudentName(
                           e.target.value
@@ -1112,7 +2439,9 @@ function App() {
                     <input
                       type="text"
                       placeholder="Department"
-                      value={department}
+                      value={
+                        department
+                      }
                       onChange={(e) =>
                         setDepartment(
                           e.target.value
@@ -1127,7 +2456,9 @@ function App() {
                     <input
                       type="text"
                       placeholder="Matric Number"
-                      value={matricNumber}
+                      value={
+                        matricNumber
+                      }
                       onChange={(e) =>
                         setMatricNumber(
                           e.target.value
@@ -1169,8 +2500,11 @@ function App() {
                     </h2>
 
                     <button
+                      type="button"
                       onClick={() =>
-                        setShowStudents(false)
+                        setShowStudents(
+                          false
+                        )
                       }
                     >
                       Close
@@ -1178,7 +2512,8 @@ function App() {
 
                   </div>
 
-                  {students.length === 0 ? (
+                  {students.length ===
+                  0 ? (
                     <p>
                       No students found.
                     </p>
@@ -1192,7 +2527,9 @@ function App() {
                           <th>
                             Matric Number
                           </th>
-                          <th>Name</th>
+                          <th>
+                            Name
+                          </th>
                           <th>
                             Department
                           </th>
@@ -1215,6 +2552,7 @@ function App() {
                                 student.id
                               }
                             >
+
                               <td>
                                 {index + 1}
                               </td>
@@ -1250,6 +2588,7 @@ function App() {
                                   Delete
                                 </button>
                               </td>
+
                             </tr>
                           )
                         )}
@@ -1269,10 +2608,13 @@ function App() {
               PROFILE
           ================================= */}
 
-          {activePage === 'profile' && (
+          {activePage ===
+            'profile' && (
             <div className="profile-page">
 
-              <h1>My Profile</h1>
+              <h1>
+                My Profile
+              </h1>
 
               <p>
                 Your account details.
@@ -1297,6 +2639,7 @@ function App() {
                   <tbody>
 
                     <tr>
+
                       <td
                         style={{
                           fontWeight: 600,
@@ -1313,9 +2656,11 @@ function App() {
                           session.user.email
                         }
                       </td>
+
                     </tr>
 
                     <tr>
+
                       <td
                         style={{
                           fontWeight: 600,
@@ -1327,24 +2672,27 @@ function App() {
                       </td>
 
                       <td>
-                        {new Date(
-                          session.user
-                            .created_at
-                        ).toLocaleDateString(
-                          'en-US',
-                          {
-                            year:
-                              'numeric',
-                            month:
-                              'long',
-                            day:
-                              'numeric',
-                          }
-                        )}
+                        {session.user.created_at
+                          ? new Date(
+                              session.user.created_at
+                            ).toLocaleDateString(
+                              'en-US',
+                              {
+                                year:
+                                  'numeric',
+                                month:
+                                  'long',
+                                day:
+                                  'numeric',
+                              }
+                            )
+                          : 'N/A'}
                       </td>
+
                     </tr>
 
                     <tr>
+
                       <td
                         style={{
                           fontWeight: 600,
@@ -1356,24 +2704,27 @@ function App() {
                       </td>
 
                       <td>
-                        {new Date(
-                          session.user
-                            .last_sign_in_at
-                        ).toLocaleDateString(
-                          'en-US',
-                          {
-                            year:
-                              'numeric',
-                            month:
-                              'long',
-                            day:
-                              'numeric',
-                          }
-                        )}
+                        {session.user.last_sign_in_at
+                          ? new Date(
+                              session.user.last_sign_in_at
+                            ).toLocaleDateString(
+                              'en-US',
+                              {
+                                year:
+                                  'numeric',
+                                month:
+                                  'long',
+                                day:
+                                  'numeric',
+                              }
+                            )
+                          : 'N/A'}
                       </td>
+
                     </tr>
 
                     <tr>
+
                       <td
                         style={{
                           fontWeight: 600,
@@ -1387,6 +2738,7 @@ function App() {
                       <td>
                         Administrator
                       </td>
+
                     </tr>
 
                   </tbody>
@@ -1394,10 +2746,13 @@ function App() {
                 </table>
 
                 <button
+                  type="button"
                   onClick={
                     handlePasswordReset
                   }
-                  disabled={resetSent}
+                  disabled={
+                    resetSent
+                  }
                 >
                   {resetSent
                     ? 'Reset Link Sent ✓'
@@ -1413,7 +2768,8 @@ function App() {
               LECTURERS
           ================================= */}
 
-          {activePage === 'lecturers' && (
+          {activePage ===
+            'lecturers' && (
             <Lecturers />
           )}
 
@@ -1421,7 +2777,8 @@ function App() {
               COURSE REGISTRATION
           ================================= */}
 
-          {activePage === 'courses' && (
+          {activePage ===
+            'courses' && (
             <div>
 
               <h1>
@@ -1438,12 +2795,15 @@ function App() {
                   handleRegisterCourse
                 }
                 style={{
-                  marginTop: '20px',
+                  marginTop:
+                    '20px',
                 }}
               >
 
                 <select
-                  value={regStudent}
+                  value={
+                    regStudent
+                  }
                   onChange={(e) =>
                     setRegStudent(
                       e.target.value
@@ -1451,15 +2811,22 @@ function App() {
                   }
                   required
                 >
+
                   <option value="">
                     Select Student
                   </option>
 
                   {students.map(
-                    (student) => (
+                    (
+                      student
+                    ) => (
                       <option
-                        key={student.id}
-                        value={student.id}
+                        key={
+                          student.id
+                        }
+                        value={
+                          student.id
+                        }
                       >
                         {
                           student.student_name
@@ -1478,12 +2845,14 @@ function App() {
                 <br />
 
                 <select
-                  value={regCourseCode}
+                  value={
+                    regCourseCode
+                  }
                   onChange={(e) => {
                     const selected =
                       knownCourses.find(
-                        (c) =>
-                          c.code ===
+                        (course) =>
+                          course.code ===
                           e.target.value
                       )
 
@@ -1511,18 +2880,35 @@ function App() {
                   </option>
 
                   {knownCourses.map(
-                    (course) => (
+                    (
+                      course
+                    ) => (
                       <option
-                        key={course.code}
-                        value={course.code}
+                        key={
+                          course.code
+                        }
+                        value={
+                          course.code
+                        }
                       >
-                        {course.code} -{' '}
-                        {course.title} (
-                        {course.unit}{' '}
+                        {
+                          course.code
+                        }{' '}
+                        -{' '}
+                        {
+                          course.title
+                        }{' '}
+                        (
+                        {
+                          course.unit
+                        }{' '}
                         unit
-                        {course.unit !== 1
-                          ? 's'
-                          : ''}
+                        {
+                          course.unit !==
+                          1
+                            ? 's'
+                            : ''
+                        }
                         )
                       </option>
                     )
@@ -1561,14 +2947,18 @@ function App() {
 
                     <tr>
                       <th>S/N</th>
-                      <th>Student</th>
+                      <th>
+                        Student
+                      </th>
                       <th>
                         Course Code
                       </th>
                       <th>
                         Course Title
                       </th>
-                      <th>Unit</th>
+                      <th>
+                        Unit
+                      </th>
                       <th>
                         Actions
                       </th>
@@ -1580,21 +2970,25 @@ function App() {
 
                     {registrations.map(
                       (
-                        reg,
+                        registration,
                         index
                       ) => {
 
                         const student =
                           students.find(
-                            (s) =>
-                              s.id ===
-                              reg.student_id
+                            (item) =>
+                              String(
+                                item.id
+                              ) ===
+                              String(
+                                registration.student_id
+                              )
                           )
 
                         return (
                           <tr
                             key={
-                              reg.id
+                              registration.id
                             }
                           >
 
@@ -1610,33 +3004,35 @@ function App() {
 
                             <td>
                               {
-                                reg.course_code
+                                registration.course_code
                               }
                             </td>
 
                             <td>
                               {
-                                reg.course_title
+                                registration.course_title
                               }
                             </td>
 
                             <td>
                               {
-                                reg.course_unit
+                                registration.course_unit
                               }
                             </td>
 
                             <td>
+
                               <button
                                 type="button"
                                 onClick={() =>
                                   handleDeleteRegistration(
-                                    reg.id
+                                    registration.id
                                   )
                                 }
                               >
                                 Delete
                               </button>
+
                             </td>
 
                           </tr>
@@ -1656,7 +3052,8 @@ function App() {
               CHECK RESULTS
           ================================= */}
 
-          {activePage === 'results' && (
+          {activePage ===
+            'results' && (
             <div>
 
               <h1>
@@ -1690,10 +3087,16 @@ function App() {
                 </option>
 
                 {students.map(
-                  (student) => (
+                  (
+                    student
+                  ) => (
                     <option
-                      key={student.id}
-                      value={student.id}
+                      key={
+                        student.id
+                      }
+                      value={
+                        student.id
+                      }
                     >
                       {
                         student.student_name
@@ -1720,18 +3123,22 @@ function App() {
 
                     const studentResults =
                       results.filter(
-                        (r) =>
-                          r.student_id ===
-                          Number(
+                        (result) =>
+                          String(
+                            result.student_id
+                          ) ===
+                          String(
                             checkResultsStudent
                           )
                       )
 
                     const student =
                       students.find(
-                        (s) =>
-                          s.id ===
-                          Number(
+                        (item) =>
+                          String(
+                            item.id
+                          ) ===
+                          String(
                             checkResultsStudent
                           )
                       )
@@ -1755,41 +3162,25 @@ function App() {
                       studentResults.reduce(
                         (
                           sum,
-                          r
+                          result
                         ) =>
                           sum +
-                          Number(
-                            r.course_unit
+                          (
+                            Number(
+                              result.course_unit
+                            ) || 0
                           ),
                         0
                       )
 
-                    const totalPoints =
-                      studentResults.reduce(
-                        (
-                          sum,
-                          r
-                        ) =>
-                          sum +
-                          Number(
-                            r.grade_point
-                          ) *
-                            Number(
-                              r.course_unit
-                            ),
-                        0
-                      )
-
                     const gpa =
-                      totalUnits
-                        ? (
-                            totalPoints /
-                            totalUnits
-                          ).toFixed(2)
-                        : '0.00'
+                      calculateGPA(
+                        studentResults
+                      )
 
                     return (
                       <>
+
                         <h2>
                           Results for{' '}
                           {
@@ -1928,7 +3319,9 @@ function App() {
                                     600,
                                 }}
                               >
-                                {totalUnits}
+                                {
+                                  totalUnits
+                                }
                               </td>
 
                               <td
@@ -1981,7 +3374,8 @@ function App() {
               ACADEMIC STANDING
           ================================= */}
 
-          {activePage === 'standing' && (
+          {activePage ===
+            'standing' && (
             <div>
 
               <h1>
@@ -1994,7 +3388,9 @@ function App() {
               </p>
 
               <select
-                value={gpaStudent}
+                value={
+                  gpaStudent
+                }
                 onChange={(e) =>
                   setGpaStudent(
                     e.target.value
@@ -2013,10 +3409,16 @@ function App() {
                 </option>
 
                 {students.map(
-                  (student) => (
+                  (
+                    student
+                  ) => (
                     <option
-                      key={student.id}
-                      value={student.id}
+                      key={
+                        student.id
+                      }
+                      value={
+                        student.id
+                      }
                     >
                       {
                         student.student_name
@@ -2043,18 +3445,22 @@ function App() {
 
                     const studentResults =
                       results.filter(
-                        (r) =>
-                          r.student_id ===
-                          Number(
+                        (result) =>
+                          String(
+                            result.student_id
+                          ) ===
+                          String(
                             gpaStudent
                           )
                       )
 
                     const student =
                       students.find(
-                        (s) =>
-                          s.id ===
-                          Number(
+                        (item) =>
+                          String(
+                            item.id
+                          ) ===
+                          String(
                             gpaStudent
                           )
                       )
@@ -2074,91 +3480,48 @@ function App() {
                       )
                     }
 
-                    const calcGPA = (
-                      list
-                    ) => {
-
-                      const totalUnits =
-                        list.reduce(
-                          (
-                            sum,
-                            r
-                          ) =>
-                            sum +
-                            Number(
-                              r.course_unit
-                            ),
-                          0
-                        )
-
-                      const totalPoints =
-                        list.reduce(
-                          (
-                            sum,
-                            r
-                          ) =>
-                            sum +
-                            Number(
-                              r.grade_point
-                            ) *
-                              Number(
-                                r.course_unit
-                              ),
-                          0
-                        )
-
-                      return totalUnits
-                        ? (
-                            totalPoints /
-                            totalUnits
-                          ).toFixed(2)
-                        : '0.00'
-                    }
-
-                    const semesterOrder =
-                      (semesterPart) =>
-                        semesterPart ===
-                        'Second Semester'
-                          ? 2
-                          : 1
-
-                    const bySemester = {}
+                    // Group results by session.
+                    const bySession = {}
 
                     studentResults.forEach(
-                      (r) => {
-
-                        const key =
-                          r.session ||
+                      (result) => {
+                        const sessionName =
+                          result.session ||
                           'No Session Recorded'
 
                         if (
-                          !bySemester[
-                            key
+                          !bySession[
+                            sessionName
                           ]
                         ) {
-                          bySemester[
-                            key
+                          bySession[
+                            sessionName
                           ] = []
                         }
 
-                        bySemester[
-                          key
-                        ].push(r)
+                        bySession[
+                          sessionName
+                        ].push(result)
                       }
                     )
 
+                    // Extract academic year.
                     const bySessionYear = {}
 
                     studentResults.forEach(
-                      (r) => {
+                      (result) => {
+                        const sessionName =
+                          result.session ||
+                          'No Session Recorded'
 
                         const sessionYear =
-                          (
-                            r.session ||
-                            'No Session Recorded'
-                          ).split(
+                          sessionName.includes(
                             ' - '
-                          )[0]
+                          )
+                            ? sessionName.split(
+                                ' - '
+                              )[0]
+                            : sessionName
 
                         if (
                           !bySessionYear[
@@ -2172,39 +3535,51 @@ function App() {
 
                         bySessionYear[
                           sessionYear
-                        ].push(r)
+                        ].push(result)
                       }
                     )
 
-                    const sortedSessionYears =
+                    const semesterOrder =
+                      (semesterName) =>
+                        semesterName ===
+                        'Second Semester'
+                          ? 2
+                          : 1
+
+                    const sessionYears =
                       Object.keys(
                         bySessionYear
-                      ).sort(
-                        (a, b) => {
-
-                          const yearA =
-                            parseInt(
-                              a.split(
-                                '/'
-                              )[0]
-                            ) || 0
-
-                          const yearB =
-                            parseInt(
-                              b.split(
-                                '/'
-                              )[0]
-                            ) || 0
-
-                          return (
-                            yearA -
-                            yearB
-                          )
-                        }
                       )
+                        .filter(
+                          (year) =>
+                            year !==
+                            'No Session Recorded'
+                        )
+                        .sort(
+                          (a, b) => {
+                            const yearA =
+                              parseInt(
+                                a.split(
+                                  '/'
+                                )[0]
+                              ) || 0
+
+                            const yearB =
+                              parseInt(
+                                b.split(
+                                  '/'
+                                )[0]
+                              ) || 0
+
+                            return (
+                              yearA -
+                              yearB
+                            )
+                          }
+                        )
 
                     const overallCGPA =
-                      calcGPA(
+                      calculateGPA(
                         studentResults
                       )
 
@@ -2212,11 +3587,13 @@ function App() {
                       studentResults.reduce(
                         (
                           sum,
-                          r
+                          result
                         ) =>
                           sum +
-                          Number(
-                            r.course_unit
+                          (
+                            Number(
+                              result.course_unit
+                            ) || 0
                           ),
                         0
                       )
@@ -2225,41 +3602,41 @@ function App() {
                     let standingColor =
                       ''
 
+                    const cgpa =
+                      Number(
+                        overallCGPA
+                      )
+
                     if (
-                      overallCGPA >=
-                      4.5
+                      cgpa >= 4.5
                     ) {
                       standing =
                         'First Class'
                       standingColor =
                         '#16a34a'
                     } else if (
-                      overallCGPA >=
-                      3.5
+                      cgpa >= 3.5
                     ) {
                       standing =
                         'Second Class Upper'
                       standingColor =
                         '#2563eb'
                     } else if (
-                      overallCGPA >=
-                      2.4
+                      cgpa >= 2.4
                     ) {
                       standing =
                         'Second Class Lower'
                       standingColor =
                         '#d97706'
                     } else if (
-                      overallCGPA >=
-                      1.5
+                      cgpa >= 1.5
                     ) {
                       standing =
                         'Third Class'
                       standingColor =
                         '#ea580c'
                     } else if (
-                      overallCGPA >=
-                      1.0
+                      cgpa >= 1.0
                     ) {
                       standing =
                         'Pass'
@@ -2296,211 +3673,207 @@ function App() {
                           }}
                         >
 
-                          {sortedSessionYears
-                            .filter(
-                              (
-                                sessionYear
-                              ) =>
-                                sessionYear !==
-                                'No Session Recorded'
-                            )
-                            .map(
-                              (
-                                sessionYear
-                              ) => {
+                          {sessionYears.map(
+                            (
+                              sessionYear
+                            ) => {
 
-                                const semesterKeysInSession =
-                                  Object.keys(
-                                    bySemester
-                                  ).filter(
+                              const semesterResults =
+                                Object.keys(
+                                  bySession
+                                )
+                                  .filter(
                                     (
                                       key
                                     ) =>
-                                      key.split(
-                                        ' - '
-                                      )[0] ===
-                                      sessionYear
+                                      key.startsWith(
+                                        `${sessionYear} - `
+                                      )
                                   )
+                                  .sort(
+                                    (
+                                      a,
+                                      b
+                                    ) => {
+                                      const semA =
+                                        semesterOrder(
+                                          a.split(
+                                            ' - '
+                                          )[1]
+                                        )
 
-                                semesterKeysInSession.sort(
-                                  (
-                                    a,
-                                    b
-                                  ) => {
+                                      const semB =
+                                        semesterOrder(
+                                          b.split(
+                                            ' - '
+                                          )[1]
+                                        )
 
-                                    const semA =
-                                      semesterOrder(
-                                        a.split(
-                                          ' - '
-                                        )[1]
+                                      return (
+                                        semA -
+                                        semB
                                       )
-
-                                    const semB =
-                                      semesterOrder(
-                                        b.split(
-                                          ' - '
-                                        )[1]
-                                      )
-
-                                    return (
-                                      semA -
-                                      semB
-                                    )
-                                  }
-                                )
-
-                                const previousSemesterKey =
-                                  semesterKeysInSession.length > 1
-                                    ? semesterKeysInSession[0]
-                                    : null
-
-                                const currentSemesterKey =
-                                  semesterKeysInSession.length > 1
-                                    ? semesterKeysInSession[1]
-                                    : semesterKeysInSession[0]
-
-                                const previousGPA =
-                                  previousSemesterKey
-                                    ? calcGPA(
-                                        bySemester[
-                                          previousSemesterKey
-                                        ]
-                                      )
-                                    : null
-
-                                const currentGPA =
-                                  currentSemesterKey
-                                    ? calcGPA(
-                                        bySemester[
-                                          currentSemesterKey
-                                        ]
-                                      )
-                                    : null
-
-                                const sessionCGPA =
-                                  calcGPA(
-                                    bySessionYear[
-                                      sessionYear
-                                    ]
-                                  )
-
-                                return (
-                                  <table
-                                    key={
-                                      sessionYear
                                     }
-                                    className="students-table"
-                                  >
+                                  )
 
-                                    <thead>
-
-                                      <tr>
-
-                                        <th colSpan="2">
-                                          {
-                                            sessionYear
-                                          }{' '}
-                                          Session
-                                        </th>
-
-                                      </tr>
-
-                                    </thead>
-
-                                    <tbody>
-
-                                      <tr>
-
-                                        <td
-                                          style={{
-                                            fontWeight:
-                                              600,
-                                            color:
-                                              '#6b7280',
-                                          }}
-                                        >
-                                          Previous GPA{' '}
-                                          {
-                                            previousSemesterKey
-                                              ? `(${previousSemesterKey.split(' - ')[1]})`
-                                              : ''
-                                          }
-                                        </td>
-
-                                        <td
-                                          style={{
-                                            fontWeight:
-                                              700,
-                                          }}
-                                        >
-                                          {previousGPA ??
-                                            'N/A'}
-                                        </td>
-
-                                      </tr>
-
-                                      <tr>
-
-                                        <td
-                                          style={{
-                                            fontWeight:
-                                              600,
-                                            color:
-                                              '#6b7280',
-                                          }}
-                                        >
-                                          Current GPA{' '}
-                                          {
-                                            currentSemesterKey
-                                              ? `(${currentSemesterKey.split(' - ')[1]})`
-                                              : ''
-                                          }
-                                        </td>
-
-                                        <td
-                                          style={{
-                                            fontWeight:
-                                              700,
-                                          }}
-                                        >
-                                          {currentGPA ??
-                                            'N/A'}
-                                        </td>
-
-                                      </tr>
-
-                                      <tr>
-
-                                        <td
-                                          style={{
-                                            fontWeight:
-                                              600,
-                                            color:
-                                              '#6b7280',
-                                          }}
-                                        >
-                                          Overall CGPA
-                                        </td>
-
-                                        <td
-                                          style={{
-                                            fontWeight:
-                                              700,
-                                          }}
-                                        >
-                                          {
-                                            sessionCGPA
-                                          }
-                                        </td>
-
-                                      </tr>
-
-                                    </tbody>
-
-                                  </table>
+                              const firstSemesterKey =
+                                semesterResults.find(
+                                  (
+                                    key
+                                  ) =>
+                                    key.endsWith(
+                                      'First Semester'
+                                    )
                                 )
-                              }
-                            )}
+
+                              const secondSemesterKey =
+                                semesterResults.find(
+                                  (
+                                    key
+                                  ) =>
+                                    key.endsWith(
+                                      'Second Semester'
+                                    )
+                                )
+
+                              const firstGPA =
+                                firstSemesterKey
+                                  ? calculateGPA(
+                                      bySession[
+                                        firstSemesterKey
+                                      ]
+                                    )
+                                  : null
+
+                              const secondGPA =
+                                secondSemesterKey
+                                  ? calculateGPA(
+                                      bySession[
+                                        secondSemesterKey
+                                      ]
+                                    )
+                                  : null
+
+                              const sessionCGPA =
+                                calculateGPA(
+                                  bySessionYear[
+                                    sessionYear
+                                  ]
+                                )
+
+                              return (
+                                <table
+                                  key={
+                                    sessionYear
+                                  }
+                                  className="students-table"
+                                >
+
+                                  <thead>
+
+                                    <tr>
+
+                                      <th
+                                        colSpan="2"
+                                      >
+                                        {
+                                          sessionYear
+                                        }{' '}
+                                        Session
+                                      </th>
+
+                                    </tr>
+
+                                  </thead>
+
+                                  <tbody>
+
+                                    <tr>
+
+                                      <td
+                                        style={{
+                                          fontWeight:
+                                            600,
+                                          color:
+                                            '#6b7280',
+                                        }}
+                                      >
+                                        First Semester GPA
+                                      </td>
+
+                                      <td
+                                        style={{
+                                          fontWeight:
+                                            700,
+                                        }}
+                                      >
+                                        {
+                                          firstGPA ??
+                                          'N/A'
+                                        }
+                                      </td>
+
+                                    </tr>
+
+                                    <tr>
+
+                                      <td
+                                        style={{
+                                          fontWeight:
+                                            600,
+                                          color:
+                                            '#6b7280',
+                                        }}
+                                      >
+                                        Second Semester GPA
+                                      </td>
+
+                                      <td
+                                        style={{
+                                          fontWeight:
+                                            700,
+                                        }}
+                                      >
+                                        {
+                                          secondGPA ??
+                                          'N/A'
+                                        }
+                                      </td>
+
+                                    </tr>
+
+                                    <tr>
+
+                                      <td
+                                        style={{
+                                          fontWeight:
+                                            600,
+                                          color:
+                                            '#6b7280',
+                                        }}
+                                      >
+                                        Session CGPA
+                                      </td>
+
+                                      <td
+                                        style={{
+                                          fontWeight:
+                                            700,
+                                        }}
+                                      >
+                                        {
+                                          sessionCGPA
+                                        }
+                                      </td>
+
+                                    </tr>
+
+                                  </tbody>
+
+                                </table>
+                              )
+                            }
+                          )}
 
                         </div>
 
@@ -2610,7 +3983,8 @@ function App() {
               COURSE MATERIALS
           ================================= */}
 
-          {activePage === 'materials' && (
+          {activePage ===
+            'materials' && (
             <div>
 
               <h1>
@@ -2623,6 +3997,7 @@ function App() {
               </p>
 
               <form
+                className="material-form"
                 onSubmit={
                   handleAddMaterial
                 }
@@ -2632,7 +4007,28 @@ function App() {
                 }}
               >
 
-                {/* COURSE */}
+                {editingMaterialId && (
+                  <div
+                    style={{
+                      marginBottom:
+                        '15px',
+                      padding:
+                        '12px 15px',
+                      borderRadius:
+                        '8px',
+                      backgroundColor:
+                        '#dbeafe',
+                      color:
+                        '#1e40af',
+                      fontWeight:
+                        600,
+                    }}
+                  >
+                    ✏️ Editing material.
+                    Make your changes and
+                    click "Update Material".
+                  </div>
+                )}
 
                 <select
                   value={
@@ -2651,7 +4047,9 @@ function App() {
                   </option>
 
                   {knownCourses.map(
-                    (course) => (
+                    (
+                      course
+                    ) => (
                       <option
                         key={
                           course.code
@@ -2660,8 +4058,13 @@ function App() {
                           course.code
                         }
                       >
-                        {course.code} -{' '}
-                        {course.title}
+                        {
+                          course.code
+                        }{' '}
+                        -{' '}
+                        {
+                          course.title
+                        }
                       </option>
                     )
                   )}
@@ -2670,8 +4073,6 @@ function App() {
 
                 <br />
                 <br />
-
-                {/* LECTURER */}
 
                 <select
                   value={
@@ -2690,13 +4091,17 @@ function App() {
                   </option>
 
                   {lecturers.map(
-                    (lecturer) => (
+                    (
+                      lecturer
+                    ) => (
                       <option
                         key={
                           lecturer.id
                         }
                         value={
-                          lecturer.id
+                          String(
+                            lecturer.id
+                          )
                         }
                       >
                         {
@@ -2710,8 +4115,6 @@ function App() {
 
                 <br />
                 <br />
-
-                {/* MATERIAL TITLE */}
 
                 <input
                   type="text"
@@ -2729,8 +4132,6 @@ function App() {
 
                 <br />
                 <br />
-
-                {/* UPLOAD / LINK */}
 
                 <div
                   style={{
@@ -2790,12 +4191,20 @@ function App() {
 
                 </div>
 
-                {materialMode === 'upload' ? (
+                {materialMode ===
+                'upload' ? (
                   <input
-                    key={materialFileInputKey}
+                    key={
+                      materialFileInputKey
+                    }
                     type="file"
                     accept=".pdf,.mp4,.mov,.avi,.jpg,.jpeg,.png,.webp"
-                    onChange={(e) => setMaterialFile(e.target.files[0])}
+                    onChange={(e) =>
+                      setMaterialFile(
+                        e.target.files?.[0] ||
+                          null
+                      )
+                    }
                   />
                 ) : (
                   <input
@@ -2817,14 +4226,49 @@ function App() {
 
                 <button
                   type="submit"
-                  disabled={uploading}
+                  disabled={
+                    uploading
+                  }
                 >
-                  {uploading ? 'Uploading...' : editingMaterialId ? 'Update Material' : 'Add Material'}
+                  {uploading
+                    ? editingMaterialId
+                      ? 'Updating...'
+                      : 'Uploading...'
+                    : editingMaterialId
+                      ? 'Update Material'
+                      : 'Add Material'}
                 </button>
 
-              </form>
+                {editingMaterialId && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingMaterialId(
+                        null
+                      )
+                      setMaterialCourseCode('')
+                      setMaterialLecturer('')
+                      setMaterialTitle('')
+                      setMaterialLink('')
+                      setMaterialFile(null)
+                      setMaterialMode('upload')
+                      setMaterialFileInputKey(
+                        (prev) =>
+                          prev + 1
+                      )
+                    }}
+                    style={{
+                      marginLeft:
+                        '10px',
+                      backgroundColor:
+                        '#6b7280',
+                    }}
+                  >
+                    Cancel Edit
+                  </button>
+                )}
 
-              {/* ALL MATERIALS */}
+              </form>
 
               <h2
                 style={{
@@ -2848,7 +4292,9 @@ function App() {
 
                     <tr>
 
-                      <th>S/N</th>
+                      <th>
+                        S/N
+                      </th>
 
                       <th>
                         Course Code
@@ -2888,9 +4334,9 @@ function App() {
 
                         const lecturer =
                           lecturers.find(
-                            (l) =>
+                            (item) =>
                               String(
-                                l.id
+                                item.id
                               ) ===
                               String(
                                 material.lecturer_id
@@ -2933,31 +4379,44 @@ function App() {
                               }}
                             >
                               {
-                                material.file_type
+                                material.file_type ||
+                                'N/A'
                               }
                             </td>
 
                             <td>
 
-                              <a
-                                href={
-                                  material.link
-                                }
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                Open
-                              </a>
+                              {material.link ? (
+                                <a
+                                  href={
+                                    material.link
+                                  }
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  Open
+                                </a>
+                              ) : (
+                                <span>
+                                  No file/link
+                                </span>
+                              )}
 
                             </td>
 
                             <td>
+
                               <button
                                 type="button"
-                                onClick={() => handleEditMaterial(material)}
+                                onClick={() =>
+                                  handleEditMaterial(
+                                    material
+                                  )
+                                }
                               >
-                                Edit
-                              </button>{' '}
+                                ✏️ Edit
+                              </button>
+
                               <button
                                 type="button"
                                 onClick={() =>
@@ -2965,9 +4424,16 @@ function App() {
                                     material.id
                                   )
                                 }
+                                style={{
+                                  marginLeft:
+                                    '8px',
+                                  backgroundColor:
+                                    '#dc2626',
+                                }}
                               >
                                 Delete
                               </button>
+
                             </td>
 
                           </tr>
@@ -2987,7 +4453,8 @@ function App() {
               SETTINGS
           ================================= */}
 
-          {activePage === 'settings' && (
+          {activePage ===
+            'settings' && (
             <div className="profile-page">
 
               <h1>
@@ -2995,25 +4462,16 @@ function App() {
               </h1>
 
               <p>
-                Manage your account and view
-                app information.
+                Manage your account, security
+                and application preferences.
               </p>
 
-              <div
-                className="profile-card"
-                style={{
-                  marginBottom:
-                    '25px',
-                }}
-              >
+              {/* ACCOUNT SETTINGS */}
 
-                <h2
-                  style={{
-                    marginBottom:
-                      '16px',
-                  }}
-                >
-                  Account
+              <div className="profile-card settings-card">
+
+                <h2>
+                  👤 Account Settings
                 </h2>
 
                 <div className="profile-row">
@@ -3040,79 +4498,467 @@ function App() {
                   }}
                 >
 
+                  <label>
+                    Change Email Address
+                  </label>
+
                   <input
                     type="email"
-                    placeholder="New email address"
+                    placeholder="Enter new email address"
                     value={
                       newEmail
                     }
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setNewEmail(
                         e.target.value
                       )
-                    }
+
+                      setEmailUpdateSent(
+                        false
+                      )
+                    }}
                     required
                   />
 
-                  <br />
-                  <br />
-
-                  <button type="submit">
+                  <button
+                    type="submit"
+                    disabled={
+                      !newEmail ||
+                      newEmail
+                        .trim()
+                        .toLowerCase() ===
+                        (
+                          session.user.email ||
+                          ''
+                        ).toLowerCase()
+                    }
+                  >
                     Update Email
                   </button>
 
                   {emailUpdateSent && (
-                    <p
-                      style={{
-                        marginTop:
-                          '10px',
-                        color:
-                          '#16a34a',
-                        fontSize:
-                          '13px',
-                      }}
-                    >
-                      Confirmation link sent
-                      to your new email.
-                      Check your inbox to
-                      complete the change.
+                    <p className="settings-success">
+                      ✓ Confirmation email sent.
+                      Check your new email address
+                      to complete the change.
                     </p>
                   )}
 
                 </form>
 
+              </div>
+
+              {/* PASSWORD SETTINGS */}
+
+              <div className="profile-card settings-card">
+
+                <h2>
+                  🔐 Password & Security
+                </h2>
+
+                <form
+                  onSubmit={
+                    handleChangePassword
+                  }
+                >
+
+                  <label>
+                    New Password
+                  </label>
+
+                  <div className="password-input-wrapper">
+
+                    <input
+                      type={
+                        showNewPassword
+                          ? 'text'
+                          : 'password'
+                      }
+                      placeholder="Enter new password"
+                      value={
+                        newPassword
+                      }
+                      onChange={(e) =>
+                        setNewPassword(
+                          e.target
+                            .value
+                        )
+                      }
+                      minLength="6"
+                      required
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setShowNewPassword(
+                          !showNewPassword
+                        )
+                      }
+                      className="password-toggle"
+                    >
+                      {showNewPassword
+                        ? 'Hide'
+                        : 'Show'}
+                    </button>
+
+                  </div>
+
+                  <label>
+                    Confirm New Password
+                  </label>
+
+                  <div className="password-input-wrapper">
+
+                    <input
+                      type={
+                        showConfirmPassword
+                          ? 'text'
+                          : 'password'
+                      }
+                      placeholder="Confirm new password"
+                      value={
+                        confirmPassword
+                      }
+                      onChange={(e) =>
+                        setConfirmPassword(
+                          e.target
+                            .value
+                        )
+                      }
+                      minLength="6"
+                      required
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setShowConfirmPassword(
+                          !showConfirmPassword
+                        )
+                      }
+                      className="password-toggle"
+                    >
+                      {showConfirmPassword
+                        ? 'Hide'
+                        : 'Show'}
+                    </button>
+
+                  </div>
+
+                  <button type="submit">
+                    Change Password
+                  </button>
+
+                </form>
+
+                <div className="settings-divider"></div>
+
                 <button
+                  type="button"
                   onClick={
                     handlePasswordReset
                   }
-                  disabled={resetSent}
-                  style={{
-                    marginTop:
-                      '16px',
-                  }}
+                  disabled={
+                    resetSent
+                  }
                 >
                   {resetSent
-                    ? 'Reset Link Sent ✓'
+                    ? '✓ Reset Link Sent'
                     : 'Send Password Reset Email'}
                 </button>
 
               </div>
 
-              <div className="profile-card">
+              {/* APPEARANCE */}
 
-                <h2
-                  style={{
-                    marginBottom:
-                      '16px',
-                  }}
-                >
-                  About
+              <div className="profile-card settings-card">
+
+                <h2>
+                  🎨 Appearance
+                </h2>
+
+                <div className="settings-option">
+
+                  <div>
+                    <strong>
+                      Appearance
+                    </strong>
+
+                    <p>
+                      Choose between light and
+                      dark mode.
+                    </p>
+                  </div>
+
+                  <div className="theme-toggle-container">
+
+                    <span>
+                      ☀️
+                    </span>
+
+                    <label className="settings-switch">
+
+                      <input
+                        type="checkbox"
+                        checked={
+                          settingsTheme ===
+                          'dark'
+                        }
+                        onChange={(e) => {
+                          const newTheme =
+                            e.target.checked
+                              ? 'dark'
+                              : 'light'
+
+                          setSettingsTheme(
+                            newTheme
+                          )
+
+                          document.body.classList.remove(
+                            'light-theme',
+                            'dark-theme'
+                          )
+
+                          document.body.classList.add(
+                            `${newTheme}-theme`
+                          )
+
+                          localStorage.setItem(
+                            'studentManagerTheme',
+                            newTheme
+                          )
+                        }}
+                      />
+
+                      <span></span>
+
+                    </label>
+
+                    <span>
+                      🌙
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              {/* NOTIFICATIONS */}
+
+              <div className="profile-card settings-card">
+
+                <h2>
+                  🔔 Notifications
+                </h2>
+
+                <div className="settings-option">
+
+                  <div>
+
+                    <strong>
+                      App Notifications
+                    </strong>
+
+                    <p>
+                      Show success and error
+                      messages throughout the
+                      application.
+                    </p>
+
+                  </div>
+
+                  <label className="settings-switch">
+
+                    <input
+                      type="checkbox"
+                      checked={
+                        notificationsEnabled
+                      }
+                      onChange={(e) => {
+                        const enabled =
+                          e.target.checked
+
+                        setNotificationsEnabled(
+                          enabled
+                        )
+
+                        localStorage.setItem(
+                          'studentManagerNotifications',
+                          String(
+                            enabled
+                          )
+                        )
+
+                        if (enabled) {
+                          toast.success(
+                            'Notifications enabled'
+                          )
+                        }
+                      }}
+                    />
+
+                    <span></span>
+
+                  </label>
+
+                </div>
+
+              </div>
+
+              {/* ACADEMIC PREFERENCES */}
+
+              <div className="profile-card settings-card">
+
+                <h2>
+                  🎓 Academic Preferences
+                </h2>
+
+                <div className="settings-grid">
+
+                  <div>
+
+                    <label>
+                      Default Academic Session
+                    </label>
+
+                    <select
+                      value={
+                        settingsSession
+                      }
+                      onChange={(e) =>
+                        setSettingsSession(
+                          e.target.value
+                        )
+                      }
+                    >
+
+                      {[0, -1, -2, 1].map(
+                        (
+                          offset
+                        ) => {
+
+                          const now =
+                            new Date()
+
+                          const year =
+                            now.getFullYear()
+
+                          const month =
+                            now.getMonth() +
+                            1
+
+                          const baseStart =
+                            month >= 9
+                              ? year
+                              : year - 1
+
+                          const startYear =
+                            baseStart +
+                            offset
+
+                          const label =
+                            `${startYear}/${startYear + 1}`
+
+                          return (
+                            <option
+                              key={
+                                label
+                              }
+                              value={
+                                label
+                              }
+                            >
+                              {label}
+                            </option>
+                          )
+                        }
+                      )}
+
+                    </select>
+
+                  </div>
+
+                  <div>
+
+                    <label>
+                      Default Semester
+                    </label>
+
+                    <select
+                      value={
+                        settingsSemester
+                      }
+                      onChange={(e) =>
+                        setSettingsSemester(
+                          e.target.value
+                        )
+                      }
+                    >
+
+                      <option value="First Semester">
+                        First Semester
+                      </option>
+
+                      <option value="Second Semester">
+                        Second Semester
+                      </option>
+
+                    </select>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+              {/* SAVE SETTINGS */}
+
+              <div className="profile-card settings-card">
+
+                <h2>
+                  ⚙️ Application Settings
+                </h2>
+
+                <div className="settings-actions">
+
+                  <button
+                    type="button"
+                    onClick={
+                      saveSettings
+                    }
+                  >
+                    {settingsSaved
+                      ? '✓ Settings Saved'
+                      : 'Save Settings'}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={
+                      resetSettings
+                    }
+                  >
+                    Restore Defaults
+                  </button>
+
+                </div>
+
+              </div>
+
+              {/* SYSTEM INFORMATION */}
+
+              <div className="profile-card settings-card">
+
+                <h2>
+                  ℹ️ System Information
                 </h2>
 
                 <div className="profile-row">
 
                   <span>
-                    App Name
+                    Application
                   </span>
 
                   <strong>
@@ -3140,9 +4986,7 @@ function App() {
                   </span>
 
                   <strong>
-                    {
-                      students.length
-                    }
+                    {students.length}
                   </strong>
 
                 </div>
@@ -3150,16 +4994,64 @@ function App() {
                 <div className="profile-row">
 
                   <span>
-                    Total Results Recorded
+                    Total Results
                   </span>
 
                   <strong>
-                    {
-                      results.length
-                    }
+                    {results.length}
                   </strong>
 
                 </div>
+
+                <div className="profile-row">
+
+                  <span>
+                    Total Courses
+                  </span>
+
+                  <strong>
+                    {knownCourses.length}
+                  </strong>
+
+                </div>
+
+                <div className="profile-row">
+
+                  <span>
+                    Total Lecturers
+                  </span>
+
+                  <strong>
+                    {lecturers.length}
+                  </strong>
+
+                </div>
+
+              </div>
+
+              {/* LOGOUT */}
+
+              <div className="profile-card settings-card danger-settings">
+
+                <h2>
+                  🚪 Account Actions
+                </h2>
+
+                <p>
+                  Sign out of your Student
+                  Manager account on this
+                  device.
+                </p>
+
+                <button
+                  type="button"
+                  onClick={
+                    handleSettingsLogout
+                  }
+                  className="logout-settings-button"
+                >
+                  Sign Out
+                </button>
 
               </div>
 

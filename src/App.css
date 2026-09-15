@@ -17,8 +17,8 @@ body,
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background-color: #000000;
-  color: #0f172a;
+  background-color: #f5f7fb;
+  color: #111827;
 }
 
 button,
@@ -36,7 +36,7 @@ select {
   display: flex;
   min-height: 100vh;
   width: 100%;
-  background-color: #010408;
+  background-color: #f5f7fb;
 }
 
 
@@ -63,7 +63,9 @@ select {
 }
 
 
-/* Sidebar Logo */
+/* =========================================
+   SIDEBAR LOGO
+========================================= */
 
 .sidebar-logo {
   display: flex;
@@ -107,7 +109,9 @@ select {
 }
 
 
-/* Sidebar Navigation */
+/* =========================================
+   SIDEBAR NAVIGATION
+========================================= */
 
 .sidebar nav {
   display: flex;
@@ -135,6 +139,7 @@ select {
 .sidebar nav a:hover {
   background-color: #2563eb;
   color: white;
+
   transform: translateX(3px);
 }
 
@@ -254,13 +259,14 @@ select {
 
 .main-content h1 {
   font-size: 28px;
+
   margin-bottom: 10px;
 
   color: #192640;
 }
 
 .main-content p {
-  color: #8a8b8d;
+  color: #6b7280;
 }
 
 
@@ -297,7 +303,7 @@ select {
 .intro-date {
   font-size: 13px;
 
-  color: #bfdbfe;
+  color: #dbeafe;
 
   margin-bottom: 12px;
 }
@@ -305,7 +311,7 @@ select {
 .intro-summary {
   font-size: 14px;
 
-  color: #172554;
+  color: #e0e7ff;
 
   line-height: 1.6;
 }
@@ -383,7 +389,9 @@ select {
 
   transition:
     transform 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .dashboard-card:hover {
@@ -451,11 +459,7 @@ button {
 button:hover {
   background-color: #1d4ed8;
 
-  transform: translateY(-1px);
-}
-
-button:active {
-  transform: translateY(0);
+  transform: translateY(-2px);
 }
 
 
@@ -497,7 +501,10 @@ select {
 
   color: #111827;
 
-  transition: all 0.2s ease;
+  transition:
+    all 0.2s ease,
+    background-color 0.25s ease,
+    color 0.25s ease;
 }
 
 input:focus,
@@ -672,96 +679,151 @@ select:focus {
 /* =========================================
    LOGIN PAGE
 ========================================= */
+
 .login-page {
   min-height: 100vh;
+
   width: 100%;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
-  background: linear-gradient(135deg, #1e1b4b, #172554, #2563eb);
+
+  background: linear-gradient(
+    135deg,
+    #1e1b4b,
+    #172554,
+    #2563eb
+  );
+
   position: relative;
+
   overflow: hidden;
 }
 
 .login-shape {
   position: absolute;
+
   border-radius: 50%;
+
   filter: blur(60px);
+
   opacity: 0.5;
 }
 
 .login-shape-1 {
   width: 350px;
+
   height: 350px;
+
   background: #60a5fa;
+
   top: -100px;
+
   left: -100px;
 }
 
 .login-shape-2 {
   width: 300px;
+
   height: 300px;
+
   background: #818cf8;
+
   bottom: -80px;
+
   right: -80px;
 }
 
 .login-shape-3 {
   width: 250px;
+
   height: 250px;
+
   background: #38bdf8;
+
   top: 60%;
+
   left: 70%;
 }
 
 .login-card {
   position: relative;
+
   z-index: 1;
+
   background: rgba(255, 255, 255, 0.12);
+
   backdrop-filter: blur(20px);
+
   -webkit-backdrop-filter: blur(20px);
+
   border: 1px solid rgba(255, 255, 255, 0.25);
+
   padding: 40px 34px;
+
   border-radius: 20px;
+
   width: 100%;
+
   max-width: 380px;
+
   box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
 }
 
 .login-logo {
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   gap: 6px;
+
   margin-bottom: 26px;
 }
 
 .login-logo .logo-icon {
   width: 52px;
+
   height: 52px;
+
   background-color: rgba(255, 255, 255, 0.2);
+
   border: 1px solid rgba(255, 255, 255, 0.3);
+
   border-radius: 14px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   margin-bottom: 10px;
 }
 
 .login-logo h2 {
   font-size: 19px;
+
   color: white;
 }
 
 .login-logo p {
   font-size: 13px;
+
   color: rgba(255, 255, 255, 0.7);
 }
 
 .login-card input {
   margin-bottom: 14px;
+
   background: rgba(255, 255, 255, 0.15);
+
   border: 1px solid rgba(255, 255, 255, 0.3);
+
   color: white;
 }
 
@@ -771,15 +833,22 @@ select:focus {
 
 .login-card input:focus {
   border-color: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.1);
 }
 
 .login-card button {
   width: 100%;
+
   padding: 13px;
+
   margin-top: 6px;
+
   background-color: white;
+
   color: #172554;
+
   font-weight: 600;
 }
 
@@ -789,19 +858,29 @@ select:focus {
 
 .login-error {
   background-color: rgba(254, 226, 226, 0.9);
+
   color: #b91c1c;
+
   padding: 10px 14px;
+
   border-radius: 8px;
+
   font-size: 13px;
+
   margin-bottom: 16px;
 }
 
 .auth-loading {
   min-height: 100vh;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   font-size: 15px;
+
   color: #6b7280;
 }
 
@@ -814,6 +893,781 @@ select:focus {
   margin-right: 10px;
 
   margin-bottom: 20px;
+}
+
+
+/* =========================================
+   SETTINGS PAGE
+========================================= */
+
+.settings-card {
+  max-width: 850px;
+
+  margin-bottom: 22px;
+}
+
+.settings-card h2 {
+  color: #111827;
+
+  font-size: 19px;
+
+  margin-bottom: 20px;
+}
+
+.settings-card label {
+  display: block;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #374151;
+
+  margin-bottom: 8px;
+}
+
+.settings-card input,
+.settings-card select {
+  margin-bottom: 14px;
+}
+
+.settings-card button {
+  margin-top: 4px;
+}
+
+.settings-success {
+  color: #16a34a !important;
+
+  background-color: #f0fdf4;
+
+  border: 1px solid #bbf7d0;
+
+  padding: 10px 12px;
+
+  border-radius: 8px;
+
+  margin-top: 10px;
+
+  font-size: 13px;
+}
+
+
+/* =========================================
+   PASSWORD INPUT
+========================================= */
+
+.password-input-wrapper {
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  margin-bottom: 16px;
+}
+
+.password-input-wrapper input {
+  padding-right: 80px;
+
+  margin-bottom: 0;
+}
+
+.password-toggle {
+  position: absolute;
+
+  right: 8px;
+
+  top: 5px;
+
+  width: auto !important;
+
+  padding: 7px 10px !important;
+
+  margin: 0 !important;
+
+  background-color: #eff6ff !important;
+
+  color: #2563eb !important;
+
+  font-size: 12px;
+}
+
+.password-toggle:hover {
+  background-color: #dbeafe !important;
+}
+
+
+/* =========================================
+   SETTINGS DIVIDER
+========================================= */
+
+.settings-divider {
+  height: 1px;
+
+  background-color: #e5e7eb;
+
+  margin: 25px 0;
+}
+
+
+/* =========================================
+   SETTINGS OPTIONS
+========================================= */
+
+.settings-option {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 25px;
+
+  padding: 15px 0;
+}
+
+.settings-option strong {
+  display: block;
+
+  color: #111827;
+
+  margin-bottom: 5px;
+}
+
+.settings-option p {
+  font-size: 13px;
+
+  color: #6b7280;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================
+   SETTINGS SELECT
+========================================= */
+
+.settings-option select {
+  width: 220px;
+
+  margin-bottom: 0;
+}
+
+.settings-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+
+/* =========================================
+   SETTINGS SWITCH
+========================================= */
+
+.settings-switch {
+  position: relative;
+
+  width: 52px;
+
+  height: 28px;
+
+  flex-shrink: 0;
+
+  cursor: pointer;
+}
+
+.settings-switch input {
+  display: none;
+}
+
+.settings-switch span {
+  position: absolute;
+
+  inset: 0;
+
+  background-color: #cbd5e1;
+
+  border-radius: 30px;
+
+  transition: 0.25s;
+}
+
+.settings-switch span::before {
+  content: "";
+
+  position: absolute;
+
+  width: 22px;
+
+  height: 22px;
+
+  left: 3px;
+
+  top: 3px;
+
+  background-color: white;
+
+  border-radius: 50%;
+
+  transition: 0.25s;
+
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.settings-switch input:checked + span {
+  background-color: #2563eb;
+}
+
+.settings-switch input:checked + span::before {
+  transform: translateX(24px);
+}
+
+
+/* =========================================
+   SETTINGS ACTIONS
+========================================= */
+
+.settings-actions {
+  display: flex;
+
+  gap: 12px;
+
+  flex-wrap: wrap;
+}
+
+.settings-actions button {
+  width: auto !important;
+}
+
+.settings-actions button:nth-child(2) {
+  background-color: #e5e7eb;
+
+  color: #374151;
+}
+
+.settings-actions button:nth-child(2):hover {
+  background-color: #d1d5db;
+}
+
+
+/* =========================================
+   DANGER SETTINGS
+========================================= */
+
+.danger-settings {
+  border-color: #fecaca;
+}
+
+.danger-settings h2 {
+  color: #991b1b;
+}
+
+.danger-settings p {
+  margin-bottom: 18px;
+
+  line-height: 1.5;
+}
+
+.logout-settings-button {
+  background-color: #dc2626 !important;
+
+  color: white !important;
+}
+
+.logout-settings-button:hover {
+  background-color: #b91c1c !important;
+}
+
+
+/* =========================================
+   DARK THEME
+========================================= */
+
+body.dark-theme {
+  background-color: #0b1120;
+
+  color: #e2e8f0;
+}
+
+body.dark-theme .app-container {
+  background-color: #0b1120;
+}
+
+body.dark-theme .main-section {
+  background-color: #0b1120;
+}
+
+
+/* =========================================
+   DARK NAVBAR
+========================================= */
+
+body.dark-theme .navbar {
+  background-color: #0f172a;
+
+  border-bottom-color: #1e293b;
+}
+
+body.dark-theme .navbar h2 {
+  color: #f8fafc;
+}
+
+body.dark-theme .menu-toggle {
+  color: #f8fafc;
+}
+
+body.dark-theme .menu-toggle:hover {
+  background-color: #1e293b;
+}
+
+body.dark-theme .student-info {
+  background-color: #172554;
+
+  color: #bfdbfe;
+}
+
+
+/* =========================================
+   DARK MAIN CONTENT
+========================================= */
+
+body.dark-theme .main-content h1,
+body.dark-theme .dashboard-header h1 {
+  color: #f8fafc;
+}
+
+body.dark-theme .main-content p,
+body.dark-theme .dashboard-header p {
+  color: #94a3b8;
+}
+
+
+/* =========================================
+   DARK DASHBOARD INTRO
+========================================= */
+
+body.dark-theme .dashboard-intro {
+  background: linear-gradient(
+    135deg,
+    #172554,
+    #1d4ed8
+  );
+}
+
+body.dark-theme .dashboard-intro h1 {
+  color: #ffffff !important;
+}
+
+body.dark-theme .intro-date {
+  color: #dbeafe !important;
+}
+
+body.dark-theme .intro-summary {
+  color: #e0e7ff !important;
+}
+
+body.dark-theme .intro-summary strong {
+  color: #facc15 !important;
+}
+
+
+/* =========================================
+   DARK DASHBOARD CARDS
+========================================= */
+
+body.dark-theme .dashboard-card {
+  background-color: #111827;
+
+  border-color: #263449;
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+body.dark-theme .dashboard-card p {
+  color: #94a3b8;
+}
+
+body.dark-theme .dashboard-card h2 {
+  color: #f8fafc;
+}
+
+body.dark-theme .card-icon {
+  background-color: #172554;
+}
+
+
+/* =========================================
+   DARK FORMS
+========================================= */
+
+body.dark-theme form {
+  background-color: #111827;
+
+  border-color: #263449;
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+body.dark-theme input,
+body.dark-theme select {
+  background-color: #0f172a;
+
+  color: #f8fafc;
+
+  border-color: #334155;
+}
+
+body.dark-theme input::placeholder {
+  color: #64748b;
+}
+
+body.dark-theme input:focus,
+body.dark-theme select:focus {
+  border-color: #3b82f6;
+
+  box-shadow:
+    0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+
+/* =========================================
+   DARK STUDENTS TABLE
+========================================= */
+
+body.dark-theme .students-table {
+  background-color: #111827;
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-theme .students-table th {
+  background-color: #172033;
+
+  color: #94a3b8;
+}
+
+body.dark-theme .students-table td {
+  color: #cbd5e1;
+
+  border-bottom-color: #1e293b;
+}
+
+body.dark-theme .students-table tbody tr:hover {
+  background-color: #172033;
+}
+
+
+/* =========================================
+   DARK PROFILE
+========================================= */
+
+body.dark-theme .profile-card {
+  background-color: #111827;
+
+  border-color: #263449;
+}
+
+body.dark-theme .profile-page > p {
+  color: #94a3b8;
+}
+
+body.dark-theme .profile-row {
+  border-bottom-color: #1e293b;
+}
+
+body.dark-theme .profile-row span {
+  color: #94a3b8;
+}
+
+body.dark-theme .profile-row strong {
+  color: #f8fafc;
+}
+
+
+/* =========================================
+   DARK SETTINGS
+========================================= */
+
+body.dark-theme .settings-card h2 {
+  color: #f8fafc;
+}
+
+body.dark-theme .settings-card label {
+  color: #cbd5e1;
+}
+
+body.dark-theme .settings-option strong {
+  color: #f8fafc;
+}
+
+body.dark-theme .settings-option p {
+  color: #94a3b8;
+}
+
+body.dark-theme .settings-divider {
+  background-color: #1e293b;
+}
+
+body.dark-theme .settings-success {
+  background-color: #052e16;
+
+  border-color: #166534;
+
+  color: #86efac !important;
+}
+
+body.dark-theme .settings-actions button:nth-child(2) {
+  background-color: #334155;
+
+  color: #f8fafc;
+}
+
+body.dark-theme .settings-actions button:nth-child(2):hover {
+  background-color: #475569;
+}
+
+
+/* =========================================
+   LIGHT THEME
+========================================= */
+
+body.light-theme {
+  background-color: #f5f7fb;
+
+  color: #111827;
+}
+
+body.light-theme .app-container {
+  background-color: #f5f7fb;
+}
+
+body.light-theme .main-section {
+  background-color: #f5f7fb;
+}
+
+
+/* =========================================
+   LIGHT NAVBAR
+========================================= */
+
+body.light-theme .navbar {
+  background-color: #ffffff;
+
+  border-bottom-color: #e5e7eb;
+}
+
+body.light-theme .navbar h2 {
+  color: #111827;
+}
+
+body.light-theme .menu-toggle {
+  color: #111827;
+}
+
+body.light-theme .menu-toggle:hover {
+  background-color: #f3f4f6;
+}
+
+body.light-theme .student-info {
+  background-color: #eff6ff;
+
+  color: #1d4ed8;
+}
+
+
+/* =========================================
+   LIGHT MAIN CONTENT
+========================================= */
+
+body.light-theme .main-content h1,
+body.light-theme .dashboard-header h1 {
+  color: #192640;
+}
+
+body.light-theme .main-content p,
+body.light-theme .dashboard-header p {
+  color: #6b7280;
+}
+
+
+/* =========================================
+   LIGHT DASHBOARD INTRO
+========================================= */
+
+body.light-theme .dashboard-intro {
+  background: linear-gradient(
+    135deg,
+    #172554,
+    #2563eb
+  );
+}
+
+body.light-theme .dashboard-intro h1 {
+  color: #ffffff !important;
+}
+
+body.light-theme .intro-date {
+  color: #9ea1ad !important;
+}
+
+body.light-theme .intro-summary {
+  color: #9ea1ad !important;
+}
+
+body.light-theme .intro-summary strong {
+  color: #facc15 !important;
+}
+
+
+/* =========================================
+   LIGHT DASHBOARD CARDS
+========================================= */
+
+body.light-theme .dashboard-card {
+  background-color: #ffffff;
+
+  border-color: #e5e7eb;
+}
+
+body.light-theme .dashboard-card p {
+  color: #6b7280;
+}
+
+body.light-theme .dashboard-card h2 {
+  color: #111827;
+}
+
+body.light-theme .card-icon {
+  background-color: #eff6ff;
+}
+
+
+/* =========================================
+   LIGHT FORMS
+========================================= */
+
+body.light-theme form {
+  background-color: #ffffff;
+
+  border-color: #e5e7eb;
+}
+
+body.light-theme input,
+body.light-theme select {
+  background-color: #ffffff;
+
+  color: #111827;
+
+  border-color: #d1d5db;
+}
+
+body.light-theme input::placeholder {
+  color: #9ca3af;
+}
+
+
+/* =========================================
+   LIGHT STUDENTS TABLE
+========================================= */
+
+body.light-theme .students-table {
+  background-color: #ffffff;
+}
+
+body.light-theme .students-table th {
+  background-color: #f8fafc;
+
+  color: #64748b;
+}
+
+body.light-theme .students-table td {
+  color: #334155;
+
+  border-bottom-color: #e5e7eb;
+}
+
+body.light-theme .students-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+
+/* =========================================
+   LIGHT PROFILE
+========================================= */
+
+body.light-theme .profile-card {
+  background-color: #ffffff;
+
+  border-color: #e5e7eb;
+}
+
+body.light-theme .profile-page > p {
+  color: #6b7280;
+}
+
+body.light-theme .profile-row {
+  border-bottom-color: #f3f4f6;
+}
+
+body.light-theme .profile-row span {
+  color: #6b7280;
+}
+
+body.light-theme .profile-row strong {
+  color: #111827;
+}
+
+
+/* =========================================
+   LIGHT SETTINGS
+========================================= */
+
+body.light-theme .settings-card h2 {
+  color: #111827;
+}
+
+body.light-theme .settings-card label {
+  color: #374151;
+}
+
+body.light-theme .settings-option strong {
+  color: #111827;
+}
+
+body.light-theme .settings-option p {
+  color: #6b7280;
+}
+
+body.light-theme .settings-divider {
+  background-color: #e5e7eb;
+}
+
+
+/* =========================================
+   THEME TRANSITION
+========================================= */
+
+body,
+.app-container,
+.main-section,
+.navbar,
+.dashboard-card,
+.profile-card,
+form,
+.students-table,
+input,
+select {
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
 }
 
 
@@ -833,7 +1687,8 @@ select:focus {
 @media (max-width: 1100px) {
 
   .dashboard-cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
   }
 
 }
@@ -911,6 +1766,36 @@ select:focus {
     overflow-x: auto;
   }
 
+  /* SETTINGS MOBILE */
+
+  .settings-option {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 15px;
+  }
+
+  .settings-option select {
+    width: 100%;
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-card {
+    padding: 22px;
+  }
+
+  .settings-actions {
+    flex-direction: column;
+  }
+
+  .settings-actions button {
+    width: 100% !important;
+  }
+
 }
 
 
@@ -942,4 +1827,132 @@ select:focus {
     padding: 20px;
   }
 
+}
+
+/* =========================================
+   LECTURER PAGE SPACING
+========================================= */
+
+.lecturers-page {
+  width: 100%;
+  padding-bottom: 40px;
+}
+
+.lecturers-page h1 {
+  margin-bottom: 10px;
+}
+
+.lecturers-page > p {
+  margin-bottom: 28px;
+}
+
+/* Header spacing */
+.lecturers-header {
+  margin-bottom: 30px;
+  gap: 30px;
+}
+
+/* Add Lecturer button */
+.lecturers-header .add-button {
+  padding: 12px 22px;
+  margin: 0;
+}
+
+/* Lecturer form */
+.lecturer-form {
+  max-width: 700px;
+  padding: 32px;
+  margin-bottom: 35px;
+}
+
+/* Form title */
+.lecturer-form h2 {
+  margin-bottom: 28px;
+}
+
+/* Space between each field */
+.lecturer-form .form-group {
+  margin-bottom: 22px;
+}
+
+/* Labels */
+.lecturer-form label {
+  display: block;
+  margin-bottom: 9px;
+  font-weight: 600;
+}
+
+/* Inputs and dropdowns */
+.lecturer-form input,
+.lecturer-form select {
+  width: 100%;
+  padding: 13px 15px;
+  min-height: 46px;
+}
+
+/* Add Lecturer button */
+.save-lecturer-button {
+  margin-top: 8px;
+  padding: 12px 24px;
+}
+
+/* Space before lecturer table */
+.lecturer-table-container {
+  margin-top: 30px;
+}
+
+/* More comfortable table spacing */
+.lecturer-table-container .students-table th,
+.lecturer-table-container .students-table td {
+  padding: 16px 20px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .lecturer-form {
+    padding: 24px;
+  }
+
+  .lecturers-header {
+    gap: 18px;
+  }
+
+  .lecturers-header .add-button {
+    width: 100%;
+  }
+
+  .save-lecturer-button {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
+/* =========================================
+   THEME TOGGLE
+========================================= */
+
+.theme-toggle-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.theme-toggle-container > span {
+  font-size: 18px;
+}
+
+/* Keep the toggle from inheriting normal button spacing */
+.theme-toggle-container .settings-switch {
+  margin: 0;
+}
+
+/* Dark mode toggle */
+body.dark-theme .theme-toggle-container {
+  color: #e2e8f0;
+}
+
+/* Light mode toggle */
+body.light-theme .theme-toggle-container {
+  color: #374151;
 }
