@@ -749,28 +749,16 @@ select:focus {
   left: 70%;
 }
 
-.login-card {
-  position: relative;
-
-  z-index: 1;
-
+.login-page .login-card,
+.login-page form.login-card {
   background: rgba(255, 255, 255, 0.12);
-
-  backdrop-filter: blur(20px);
-
-  -webkit-backdrop-filter: blur(20px);
-
   border: 1px solid rgba(255, 255, 255, 0.25);
+}
 
-  padding: 40px 34px;
-
-  border-radius: 20px;
-
-  width: 100%;
-
-  max-width: 380px;
-
-  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+.login-page .login-card input {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
 }
 
 .login-logo {
