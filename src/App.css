@@ -683,6 +683,8 @@ select:focus {
 .login-page {
   min-height: 100vh;
 
+  min-height: 100dvh;
+
   width: 100%;
 
   display: flex;
@@ -690,6 +692,8 @@ select:focus {
   align-items: center;
 
   justify-content: center;
+
+  padding: 20px;
 
   background: linear-gradient(
     135deg,
@@ -860,6 +864,8 @@ select:focus {
 
 .auth-loading {
   min-height: 100vh;
+
+  min-height: 100dvh;
 
   display: flex;
 
