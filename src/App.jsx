@@ -5029,32 +5029,6 @@ function App() {
 
               </div>
 
-              {/* LOGOUT */}
-
-              <div className="profile-card settings-card danger-settings">
-
-                <h2>
-                  🚪 Account Actions
-                </h2>
-
-                <p>
-                  Sign out of your Student
-                  Manager account on this
-                  device.
-                </p>
-
-                <button
-                  type="button"
-                  onClick={
-                    handleSettingsLogout
-                  }
-                  className="logout-settings-button"
-                >
-                  Sign Out
-                </button>
-
-              </div>
-
             </div>
           )}
 
